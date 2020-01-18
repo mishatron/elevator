@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "627158022988",
+    "firebase_url": "https://elevator-3135c.firebaseio.com",
+    "project_id": "elevator-3135c",
+    "storage_bucket": "elevator-3135c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627158022988:android:1ad483bc13ffe9e3b96de9",
+        "android_client_info": {
+          "package_name": "com.mishatronic.elevator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "627158022988-vekfs9gk4pgs4o0dm41s58fch5he20h8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mishatronic.elevator",
+            "certificate_hash": "80e561b3541ca7dbcd24893f14e65dfd6ad05f42"
+          }
+        },
+        {
+          "client_id": "627158022988-bt8q40oujidv5ed3foteu2gjmqbfcb0i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE3CIXxTyX-B-R01ftFVFtqG-QaT_rNAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "627158022988-bt8q40oujidv5ed3foteu2gjmqbfcb0i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
