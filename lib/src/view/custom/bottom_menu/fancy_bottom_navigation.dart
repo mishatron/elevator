@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:elevator/src/view/custom/bottom_menu/internal/tab_item.dart';
 import 'package:elevator/src/view/custom/bottom_menu/paint/half_clipper.dart';
