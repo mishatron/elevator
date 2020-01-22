@@ -8,7 +8,7 @@ Widget _getUserImagePlaceholder(double size) {
     decoration: BoxDecoration(
       shape: BoxShape.circle,
       image: DecorationImage(
-        image: AssetImage("assets/ic_avatar_placeholder.png"),
+        image: AssetImage("assets/ic_avatar.png"),
         fit: BoxFit.cover,
       ),
     ),

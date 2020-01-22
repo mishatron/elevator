@@ -31,7 +31,7 @@ TextStyle getAppBarTheme(BuildContext context){
       .copyWith()
       .textTheme
       .title
-      .copyWith(color: colorPrimaryText);
+      .copyWith(color: colorAccent);
 }
 
 

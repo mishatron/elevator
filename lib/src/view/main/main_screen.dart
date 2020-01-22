@@ -1,11 +1,10 @@
-import 'package:elevator/src/view/custom/bottom_menu/fancy_bottom_navigation.dart';
-import 'package:elevator/src/view/profile/profile_screen.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:elevator/res/values/colors.dart';
-import 'package:elevator/src/core/localization/app_localizations.dart';
 import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
+import 'package:elevator/src/view/custom/bottom_menu/fancy_bottom_navigation.dart';
+import 'package:elevator/src/view/main/profile/profile_screen.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class MainScreen extends BaseStatefulWidget {
   @override
@@ -40,8 +39,8 @@ class _MainScreenState extends BaseStatefulScreen<MainScreen> {
       circleColor: colorAccent,
       inactiveIconColor: colorAccent,
       tabs: [
-        TabData(iconData: Icons.home, title: "sfdsf"),
-        TabData(iconData: Icons.list, title: "sdfdf"),
+        TabData(iconData: Icons.home, title: "Головна"),
+        TabData(iconData: Icons.history, title: "Історія"),
         TabData(iconData: Icons.account_circle, title: "Профіль"),
       ],
       onTabChangedListener: (position) {
