@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../../res/values/colors.dart';
 
 Widget _getUserImagePlaceholder(double size) {
   return Container(
@@ -7,6 +10,7 @@ Widget _getUserImagePlaceholder(double size) {
     height: size,
     decoration: BoxDecoration(
       shape: BoxShape.circle,
+      border: Border.all(color: colorAccent, width: 1),
       image: DecorationImage(
         image: AssetImage("assets/ic_avatar.png"),
         fit: BoxFit.cover,
@@ -23,6 +27,7 @@ Widget getUserAvatar(String url, double size){
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
+        border: Border.all(color: colorAccent, width: 1),
         image: DecorationImage(
           image: imageProvider,
           fit: BoxFit.cover,

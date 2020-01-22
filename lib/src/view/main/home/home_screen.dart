@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'list_item.dart';
+
 class HomeScreen extends BaseStatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -23,7 +25,37 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
   ScrollController _hideButtonController;
   bool _isFabVisible = true;
 
-  List<Widget> tabs = [Container(), Container()];
+  List<Widget> tabs = [_buildListEntered(), _buildListLeft()];
+
+  static Widget _buildListEntered() {
+    return ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return ListItem(
+            carNumber: "AM 8097 CT",
+            carModel: "Audi 5X",
+            grains: "Зерно 5т",
+            name: "Андрей Макаревич",
+            phoneNumber: "+380980000000",
+            imageUrl: "",
+          );
+        });
+  }
+
+  static Widget _buildListLeft() {
+    return ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return ListItem(
+            carNumber: "AM 8097 CT",
+            carModel: "Audi 5X",
+            grains: "Зерно 5т",
+            name: "Андрей Макаревич",
+            phoneNumber: "+380980000000",
+            imageUrl: "",
+          );
+        });
+  }
 
   @override
   void initState() {
@@ -59,10 +91,10 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
           labelStyle: getMidFont(),
           tabs: <Widget>[
             Tab(
-              child: Text('Приїзд'),
+              child: Text('Заїзд'),
             ),
             Tab(
-              child: Text('Від\'їзд'),
+              child: Text('Виїзд'),
             ),
           ],
         ));

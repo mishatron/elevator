@@ -6,6 +6,7 @@ import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/view/main/history/history_bloc.dart';
+import 'package:elevator/src/view/main/home/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +21,37 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
     with BaseBlocListener {
   HistoryBloc _bloc = HistoryBloc();
 
-  List<Widget> tabs = [Container(), Container()];
+  List<Widget> tabs = [_buildListEntered(), _buildListLeft()];
+
+  static Widget _buildListEntered() {
+    return ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return ListItem(
+            carNumber: "AM 8097 CT",
+            carModel: "Audi 5X",
+            grains: "Зерно 5т",
+            name: "Андрей Макаревич",
+            phoneNumber: "+380980000000",
+            imageUrl: "",
+          );
+        });
+  }
+
+  static Widget _buildListLeft() {
+    return ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return ListItem(
+            carNumber: "AM 8097 CT",
+            carModel: "Audi 5X",
+            grains: "Зерно 5т",
+            name: "Андрей Макаревич",
+            phoneNumber: "+380980000000",
+            imageUrl: "",
+          );
+        });
+  }
 
   @override
   Widget buildAppbar() {
@@ -31,10 +62,10 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
           labelStyle: getMidFont(),
           tabs: <Widget>[
             Tab(
-              child: Text('Приїзд'),
+              child: Text('Заїзд'),
             ),
             Tab(
-              child: Text('Від\'їзд'),
+              child: Text('Виїзд'),
             ),
           ],
         ));
