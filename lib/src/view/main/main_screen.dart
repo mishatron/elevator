@@ -2,6 +2,8 @@ import 'package:elevator/res/values/colors.dart';
 import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/view/custom/bottom_menu/fancy_bottom_navigation.dart';
+import 'package:elevator/src/view/main/history/history_screen.dart';
+import 'package:elevator/src/view/main/home/home_screen.dart';
 import 'package:elevator/src/view/main/profile/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +18,8 @@ class MainScreen extends BaseStatefulWidget {
 class _MainScreenState extends BaseStatefulScreen<MainScreen> {
   ValueNotifier<int> _currentIndex = ValueNotifier(0);
   List<Widget> _children = [
-    Container(),
-    Container(),
+    HomeScreen(),
+    HistoryScreen(),
     ProfileScreen(),
   ];
 
