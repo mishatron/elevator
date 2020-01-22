@@ -1,10 +1,18 @@
+import 'package:elevator/res/values/colors.dart';
+import 'package:elevator/res/values/styles.dart';
 import 'package:elevator/router/navigation_service.dart';
 import 'package:elevator/router/route_paths.dart';
+import 'package:elevator/src/core/bloc/loading_state.dart';
+import 'package:elevator/src/core/bloc/no_loading_state.dart';
 import 'package:elevator/src/core/ui/base_state.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/di/dependency_injection.dart';
+import 'package:elevator/src/view/custom/BaseButton.dart';
+import 'package:elevator/src/view/login/login_bloc.dart';
+import 'package:elevator/src/view/utils/text_field_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PhoneSignInSection extends BaseStatefulWidget {
   PhoneSignInSection();
@@ -15,133 +23,104 @@ class PhoneSignInSection extends BaseStatefulWidget {
 
 class _PhoneSignInSectionState extends BaseState<PhoneSignInSection> {
   final TextEditingController _phoneNumberController = TextEditingController();
-  final TextEditingController _smsController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   var _auth = FirebaseAuth.instance;
 
-  String _message = '';
-  String _verificationId;
+  LoginBloc _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = BlocProvider.of(context);
+  }
 
   @override
   Widget getLayout() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          child: const Text('Test sign in with phone number'),
-          padding: const EdgeInsets.all(16),
-          alignment: Alignment.center,
-        ),
-        TextFormField(
-          controller: _phoneNumberController,
-          decoration: const InputDecoration(
-              labelText: 'Phone number (+x xxx-xxx-xxxx)'),
-          validator: (String value) {
-            if (value.isEmpty) {
-              return 'Phone number (+x xxx-xxx-xxxx)';
-            }
-            return null;
-          },
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          alignment: Alignment.center,
-          child: RaisedButton(
-            onPressed: () async {
-              _verifyPhoneNumber();
-            },
-            child: const Text('Verify phone number'),
+    return InkWell(
+      splashColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      onTap: () {
+        _focusNode.unfocus();
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Image.asset("assets/login_placeholder.png"),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextFormField(
+              controller: _phoneNumberController,
+              focusNode: _focusNode,
+              keyboardType: TextInputType.phone,
+              decoration:
+                  getTextFieldDecoration(context, 'Введіть номер телефону'),
+              validator: (String value) {
+                if (value.isEmpty) {
+                  return 'Формат: (+x xxx-xxx-xxxx)';
+                }
+                return null;
+              },
+            ),
           ),
-        ),
-        TextField(
-          controller: _smsController,
-          decoration: const InputDecoration(labelText: 'Verification code'),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          alignment: Alignment.center,
-          child: RaisedButton(
-            onPressed: () async {
-              _signInWithPhoneNumber();
-            },
-            child: const Text('Sign in with phone number'),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: BaseButton(
+              text: 'Далі',
+              onClick: _verifyPhoneNumber,
+            ),
           ),
-        ),
-        Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            _message,
-            style: TextStyle(color: Colors.red),
-          ),
-        )
-      ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Text(
+              "Натискаючи кнопку “Далі”, я приймаю умови Політики конфіденційності.",
+              textAlign: TextAlign.center,
+              style: getSmallFont().apply(color: colorAccent),
+            ),
+          )
+        ],
+      ),
     );
   }
 
   // Example code of how to verify phone number
   void _verifyPhoneNumber() async {
-    setState(() {
-      _message = '';
-    });
     final PhoneVerificationCompleted verificationCompleted =
         (AuthCredential phoneAuthCredential) {
       _auth.signInWithCredential(phoneAuthCredential);
-      setState(() {
-        _message = 'Received phone auth credential: $phoneAuthCredential';
-      });
+      showMessage("Ви авторизовані тепер");
     };
 
     final PhoneVerificationFailed verificationFailed =
         (AuthException authException) {
-      setState(() {
-        _message =
-            'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}';
-      });
+      showMessage("Ви ввели невірний номер телефону");
     };
 
     final PhoneCodeSent codeSent =
         (String verificationId, [int forceResendingToken]) async {
-      showMessage('Please check your phone for the verification code.');
-      _verificationId = verificationId;
+      showMessage("Очікуйте смс");
+      _bloc.add(LoginStateVerification());
+      _bloc.verificationId = verificationId;
     };
 
     final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
         (String verificationId) {
-      _verificationId = verificationId;
+      _bloc.verificationId = verificationId;
     };
 
-    await _auth.verifyPhoneNumber(
-        phoneNumber: _phoneNumberController.text,
-        timeout: const Duration(seconds: 5),
-        verificationCompleted: verificationCompleted,
-        verificationFailed: verificationFailed,
-        codeSent: codeSent,
-        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
-  }
+    if(_phoneNumberController.text.isNotEmpty) {
+      hideKeyboard();
+      _bloc.add(LoadingState());
 
-  // Example code of how to sign in with phone.
-  void _signInWithPhoneNumber() async {
-    try {
-      final AuthCredential credential = PhoneAuthProvider.getCredential(
-        verificationId: _verificationId,
-        smsCode: _smsController.text,
-      );
-      final FirebaseUser user =
-          (await _auth.signInWithCredential(credential)).user;
-      final FirebaseUser currentUser = await _auth.currentUser();
-      assert(user.uid == currentUser.uid);
-      setState(() {
-        if (user != null) {
-          _message = 'Successfully signed in, uid: ' + user.uid;
-          injector<NavigationService>().pushNamedReplacement(mainRoute);
-        } else {
-          _message = 'Sign in failed';
-        }
-      });
-    } catch (err) {
-      setState(() {
-        _message = 'Sign in failed';
-      });
+      await _auth.verifyPhoneNumber(
+          phoneNumber: _phoneNumberController.text,
+          timeout: const Duration(seconds: 5),
+          verificationCompleted: verificationCompleted,
+          verificationFailed: verificationFailed,
+          codeSent: codeSent,
+          codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+
+      _bloc.add(NoLoadingState());
     }
   }
 }
