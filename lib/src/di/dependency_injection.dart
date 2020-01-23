@@ -1,5 +1,7 @@
 import 'package:elevator/src/data/repositories/auth/auth_repository.dart';
 import 'package:elevator/src/data/repositories/auth/auth_repository_impl.dart';
+import 'package:elevator/src/data/repositories/order/order_repository.dart';
+import 'package:elevator/src/data/repositories/order/order_repository_impl.dart';
 import 'package:get_it/get_it.dart';
 import 'package:elevator/router/navigation_service.dart';
 import 'package:elevator/src/core/api/dio_manager.dart';
@@ -29,6 +31,7 @@ class InjectorDI {
     injector.registerLazySingleton(() => NavigationService());
 
     injector.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
+    injector.registerLazySingleton<OrderRepository>(() => OrderRepositoryImpl());
 
     DioManager.configure();
   }

@@ -21,37 +21,7 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
     with BaseBlocListener {
   HistoryBloc _bloc = HistoryBloc();
 
-  List<Widget> tabs = [_buildListEntered(), _buildListLeft()];
-
-  static Widget _buildListEntered() {
-    return ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return ListItem(
-            carNumber: "AM 8097 CT",
-            carModel: "Audi 5X",
-            grains: "Зерно 5т",
-            name: "Андрей Макаревич",
-            phoneNumber: "+380980000000",
-            imageUrl: "",
-          );
-        });
-  }
-
-  static Widget _buildListLeft() {
-    return ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return ListItem(
-            carNumber: "AM 8097 CT",
-            carModel: "Audi 5X",
-            grains: "Зерно 5т",
-            name: "Андрей Макаревич",
-            phoneNumber: "+380980000000",
-            imageUrl: "",
-          );
-        });
-  }
+  List<Widget> tabs = [Container(), Container()];
 
   @override
   Widget buildAppbar() {

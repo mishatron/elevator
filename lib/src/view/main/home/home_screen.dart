@@ -6,6 +6,8 @@ import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/view/main/home/home_bloc.dart';
+import 'package:elevator/src/view/main/home/tabs/entered_tab.dart';
+import 'package:elevator/src/view/main/home/tabs/left_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,37 +27,7 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
   ScrollController _hideButtonController;
   bool _isFabVisible = true;
 
-  List<Widget> tabs = [_buildListEntered(), _buildListLeft()];
-
-  static Widget _buildListEntered() {
-    return ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return ListItem(
-            carNumber: "AM 8097 CT",
-            carModel: "Audi 5X",
-            grains: "Зерно 5т",
-            name: "Андрей Макаревич",
-            phoneNumber: "+380980000000",
-            imageUrl: "",
-          );
-        });
-  }
-
-  static Widget _buildListLeft() {
-    return ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return ListItem(
-            carNumber: "AM 8097 CT",
-            carModel: "Audi 5X",
-            grains: "Зерно 5т",
-            name: "Андрей Макаревич",
-            phoneNumber: "+380980000000",
-            imageUrl: "",
-          );
-        });
-  }
+  List<Widget> tabs = [EnteredTab(), LeftTab()];
 
   @override
   void initState() {

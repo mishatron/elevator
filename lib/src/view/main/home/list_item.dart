@@ -1,26 +1,13 @@
 import 'package:elevator/res/values/colors.dart';
+import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/view/utils/image_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 class ListItem extends StatelessWidget {
-  final String carNumber;
-  final String carModel;
-  final String grains;
-  final String name;
-  final String phoneNumber;
-  final String imageUrl;
-  final Function onTap;
+  final Order order;
 
-  ListItem(
-      {this.carNumber,
-      this.carModel,
-      this.grains,
-      this.name,
-      this.phoneNumber,
-      this.imageUrl,
-      this.onTap});
+  ListItem(this.order);
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +19,8 @@ class ListItem extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
             border: Border.all(color: colorAccent, width: 1)),
         child: ListTile(
-          onTap: onTap,
-          leading: getUserAvatar(imageUrl, 50),
+          onTap: (){},
+          leading: getUserAvatar("sdfsdf", 50),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,13 +35,13 @@ class ListItem extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Text(
-                        carNumber,
+                        "sdfsdf",
                         style: TextStyle(color: colorAccent, fontSize: 14),
                       ),
                     ),
                   ),
                   Text(
-                    carModel,
+                    "sdfsdf",
                     style: TextStyle(color: colorAccent, fontSize: 16),
                   ),
                 ],
@@ -62,7 +49,7 @@ class ListItem extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 child: Text(
-                  grains,
+                  "sdfsdf",
                   style: TextStyle(color: colorAccent, fontSize: 14),
                 ),
               ),
@@ -70,14 +57,14 @@ class ListItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    name,
+                    "dfsdf",
                     style: TextStyle(
                         color: colorAccent,
                         fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    phoneNumber,
+                    "fdsdfs",
                     style: TextStyle(
                       color: colorAccent,
                       fontSize: 16,
