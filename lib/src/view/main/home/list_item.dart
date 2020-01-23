@@ -1,11 +1,8 @@
+import 'package:elevator/res/values/colors.dart';
+import 'package:elevator/src/view/utils/image_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../res/values/colors.dart';
-import '../../../../res/values/colors.dart';
-import '../../../../res/values/colors.dart';
-import '../../../../res/values/colors.dart';
-import '../../utils/image_utils.dart';
 
 class ListItem extends StatelessWidget {
   final String carNumber;
