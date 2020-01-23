@@ -6,33 +6,27 @@ import 'package:elevator/src/domain/responses/order/order.dart';
 
 class OrderRepositoryImpl extends OrderRepository {
   @override
-  Future<String> addCar(Car model) async {
+  Future<void> addCar(Car model) async {
     return Firestore.instance
         .collection('cars')
-        .add(model.toJson())
-        .then((DocumentReference ref) {
-      return ref.documentID;
-    });
+        .document(model.id)
+        .setData(model.toJson());
   }
 
   @override
-  Future<String> addDriver(Driver model) async {
+  Future<void> addDriver(Driver model) async {
     return Firestore.instance
         .collection('drivers')
-        .add(model.toJson())
-        .then((DocumentReference ref) {
-      return ref.documentID;
-    });
+        .document(model.id)
+        .setData(model.toJson());
   }
 
   @override
-  Future<String> addOrder(Order model) async {
+  Future<void> addOrder(Order model) async {
     return Firestore.instance
         .collection('orders')
-        .add(model.toJson())
-        .then((DocumentReference ref) {
-      return ref.documentID;
-    });
+        .document(model.id)
+        .setData(model.toJson());
   }
 
   @override

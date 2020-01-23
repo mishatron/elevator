@@ -19,8 +19,8 @@ class ListItem extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
             border: Border.all(color: colorAccent, width: 1)),
         child: ListTile(
-          onTap: (){},
-          leading: getUserAvatar("sdfsdf", 50),
+          onTap: () {},
+          leading: getUserAvatar(order.driver.photoUrl, 50),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,13 +35,13 @@ class ListItem extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Text(
-                        "sdfsdf",
+                        order.car.carNumber,
                         style: TextStyle(color: colorAccent, fontSize: 14),
                       ),
                     ),
                   ),
                   Text(
-                    "sdfsdf",
+                    order.car.carModel,
                     style: TextStyle(color: colorAccent, fontSize: 16),
                   ),
                 ],
@@ -49,25 +49,39 @@ class ListItem extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 child: Text(
-                  "sdfsdf",
+                  order.goods[0].name +
+                      " " +
+                      order.goods[0].count.toString() +
+                      "т",
                   style: TextStyle(color: colorAccent, fontSize: 14),
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    "dfsdf",
-                    style: TextStyle(
+                  Expanded(
+                    child: Text(
+                      order.driver.getFullName(),
+                      maxLines: 1,
+                      softWrap: true,
+                      overflow: TextOverflow.fade,
+                      style: TextStyle(
+                          color: colorAccent,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      order.driver.phone,
+                      maxLines: 1,
+                      softWrap: true,
+                      overflow: TextOverflow.fade,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
                         color: colorAccent,
                         fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "fdsdfs",
-                    style: TextStyle(
-                      color: colorAccent,
-                      fontSize: 16,
+                      ),
                     ),
                   ),
                 ],

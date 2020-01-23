@@ -4,6 +4,7 @@ import 'package:elevator/src/domain/responses/order/good.dart';
 import 'package:elevator/src/domain/responses/order/stamp.dart';
 
 class Order {
+  String id;
   int type;
   int status;
   int timeStatus;
@@ -12,30 +13,27 @@ class Order {
   String owner;
   String from;
   String to;
-  String driverId;
-  String carId;
   int createdAt;
   Driver driver;
   Car car;
 
   Order(
-    this.type,
-    this.status,
-    this.timeStatus,
-    this.stamps,
-    this.goods,
-    this.owner,
-    this.from,
-    this.to,
-    this.driverId,
-    this.carId,
-    this.createdAt,
-    /*this.driver,
-      this.car*/
-  );
+      this.id,
+      this.type,
+      this.status,
+      this.timeStatus,
+      this.stamps,
+      this.goods,
+      this.owner,
+      this.from,
+      this.to,
+      this.createdAt,
+      this.driver,
+      this.car);
 
   Order.fromJsonMap(Map<dynamic, dynamic> map)
-      : type = map["type"],
+      : id = map["id"],
+        type = map["type"],
         status = map["status"],
         timeStatus = map["timeStatus"],
         stamps =
@@ -44,14 +42,13 @@ class Order {
         owner = map["owner"],
         from = map["from"],
         to = map["to"],
-        driverId = map["driverId"],
-        carId = map["carId"],
-        driver = map["driver"],
-        car = map["car"],
+        driver = Driver.fromJsonMap(map["driver"]),
+        car = Car.fromJsonMap(map["car"]),
         createdAt = map["createdAt"];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = id;
     data['type'] = type;
     data['status'] = status;
     data['timeStatus'] = timeStatus;
@@ -62,11 +59,9 @@ class Order {
     data['owner'] = owner;
     data['from'] = from;
     data['to'] = to;
-    data['driverId'] = driverId;
-    data['carId'] = carId;
     data['createdAt'] = createdAt;
-    data['driver'] = driver;
-    data['car'] = car;
+    data['driver'] = driver.toJson();
+    data['car'] = car.toJson();
     return data;
   }
 }
