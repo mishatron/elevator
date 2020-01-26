@@ -1,5 +1,6 @@
 import 'package:elevator/src/view/login/login_screen.dart';
 import 'package:elevator/src/view/main/main_screen.dart';
+import 'package:elevator/src/view/order_detail/order_detail_screen.dart';
 import 'package:elevator/src/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:elevator/router/route_paths.dart' as routes;
@@ -15,6 +16,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return getPageRoute(LoginScreen());
     case routes.mainRoute:
       return getPageRoute(MainScreen());
+    case routes.orderDetailRoute:
+      return getPageRoute(OrderDetail());
 
     default:
       return MaterialPageRoute(

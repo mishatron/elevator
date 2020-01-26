@@ -1,4 +1,7 @@
 import 'package:elevator/res/values/colors.dart';
+import 'package:elevator/router/navigation_service.dart';
+import 'package:elevator/router/route_paths.dart';
+import 'package:elevator/src/di/dependency_injection.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/view/utils/image_utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +22,9 @@ class ListItem extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
             border: Border.all(color: colorAccent, width: 1)),
         child: ListTile(
-          onTap: () {},
+          onTap: () {
+            injector<NavigationService>().pushNamed(orderDetailRoute, arguments: order);
+          },
           leading: getUserAvatar(order.driver.photoUrl, 50),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
