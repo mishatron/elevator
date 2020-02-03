@@ -6,7 +6,8 @@ import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/view/main/history/history_bloc.dart';
-import 'package:elevator/src/view/main/home/list_item.dart';
+import 'package:elevator/src/view/main/history/tabs/entered_history_tab.dart';
+import 'package:elevator/src/view/main/history/tabs/left_history_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +22,7 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
     with BaseBlocListener {
   HistoryBloc _bloc = HistoryBloc();
 
-  List<Widget> tabs = [Container(), Container()];
+  List<Widget> tabs = [EnteredHistoryTab(), LeftHistoryTab()];
 
   @override
   Widget buildAppbar() {

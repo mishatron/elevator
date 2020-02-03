@@ -2,6 +2,7 @@ import 'package:elevator/res/values/colors.dart';
 import 'package:elevator/router/navigation_service.dart';
 import 'package:elevator/router/route_paths.dart';
 import 'package:elevator/src/di/dependency_injection.dart';
+import 'package:elevator/src/domain/models/order_status.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/view/utils/image_utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,16 +15,22 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color borderColor = colorAccent;
+    if (order.status == OrderStatus.ACCEPTED.index)
+      borderColor = Colors.greenAccent;
+    else if (order.status == OrderStatus.DECLINED.index)
+      borderColor = Colors.redAccent;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 6),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            border: Border.all(color: colorAccent, width: 1)),
+            border: Border.all(color: borderColor, width: 1)),
         child: ListTile(
           onTap: () {
-            injector<NavigationService>().pushNamed(orderDetailRoute, arguments: order);
+            injector<NavigationService>()
+                .pushNamed(orderDetailRoute, arguments: order);
           },
           leading: getUserAvatar(order.driver.photoUrl, 50),
           title: Column(
