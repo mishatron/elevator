@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LeftTab extends BaseStatefulWidget {
+  final ScrollController hideButtonController;
+
+  LeftTab(this.hideButtonController);
+
   @override
   State<StatefulWidget> createState() {
     return _LeftTabState();
@@ -31,6 +35,7 @@ class _LeftTabState extends BaseState<LeftTab> {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) return getProgress(background: false);
         return ListView(
+          controller: widget.hideButtonController,
           children: snapshot.data.documents.map((document) {
             return ListItem(Order.fromJsonMap(document.data));
           }).toList(),
