@@ -14,4 +14,6 @@ abstract class OrderRepository extends BaseRepository {
   Stream<QuerySnapshot> getInputOrders();
 
   Stream<QuerySnapshot> getOutputOrders();
+
+  Stream<QuerySnapshot> getCars();
 }

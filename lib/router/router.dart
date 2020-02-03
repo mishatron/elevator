@@ -1,3 +1,4 @@
+import 'package:elevator/src/view/create_order/create_order_screen.dart';
 import 'package:elevator/src/view/login/login_screen.dart';
 import 'package:elevator/src/view/main/main_screen.dart';
 import 'package:elevator/src/view/order_detail/order_detail_screen.dart';
@@ -18,6 +19,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return getPageRoute(MainScreen());
     case routes.orderDetailRoute:
       return getPageRoute(OrderDetail());
+    case routes.createOrderRoute:
+      return getPageRoute(CreateOrderScreen());
 
     default:
       return MaterialPageRoute(

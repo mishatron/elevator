@@ -14,6 +14,13 @@ class OrderRepositoryImpl extends OrderRepository {
   }
 
   @override
+  Stream<QuerySnapshot> getCars() {
+    return Firestore.instance
+        .collection('cars')
+        .snapshots();
+  }
+
+  @override
   Future<void> addDriver(Driver model) async {
     return Firestore.instance
         .collection('drivers')

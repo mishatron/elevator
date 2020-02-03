@@ -1,10 +1,13 @@
 import 'package:elevator/res/values/colors.dart';
 import 'package:elevator/res/values/styles.dart';
+import 'package:elevator/router/navigation_service.dart';
+import 'package:elevator/router/route_paths.dart';
 import 'package:elevator/src/core/bloc/base_bloc_listener.dart';
 import 'package:elevator/src/core/bloc/base_bloc_state.dart';
 import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
+import 'package:elevator/src/di/dependency_injection.dart';
 import 'package:elevator/src/view/main/home/home_bloc.dart';
 import 'package:elevator/src/view/main/home/tabs/entered_tab.dart';
 import 'package:elevator/src/view/main/home/tabs/left_tab.dart';
@@ -119,5 +122,7 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
     super.dispose();
   }
 
-  void addButtonHandler() {}
+  void addButtonHandler() {
+    injector<NavigationService>().pushNamed(createOrderRoute);
+  }
 }
