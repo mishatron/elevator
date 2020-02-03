@@ -1,19 +1,23 @@
 import 'package:elevator/res/values/colors.dart';
+import 'package:elevator/src/core/bloc/base_bloc_listener.dart';
 import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/view/custom/BaseButton.dart';
+import 'package:elevator/src/view/order_detail/order_details_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OrderDetail extends BaseStatefulWidget {
   @override
   _OrderDetailState createState() => _OrderDetailState();
 }
 
-class _OrderDetailState extends BaseStatefulScreen<OrderDetail> {
-  Order order;
+class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
+    with BaseBlocListener {
+  OrderDetailsBloc _bloc = OrderDetailsBloc();
 
   @override
   Widget buildAppbar() {
@@ -22,156 +26,173 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail> {
 
   @override
   Widget buildBody() {
-    if (order == null) order = ModalRoute.of(context).settings.arguments;
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    if (_bloc.order == null)
+      _bloc.order = ModalRoute.of(context).settings.arguments;
+    return BlocProvider(
+      create: (context) => _bloc,
+      child: BlocListener(
+        bloc: _bloc,
+        listener: blocListener,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                _buildButton("Відхилити", _askDecline),
-                _buildButton("Прийняти", _accept),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                //getUserAvatar(order.driver.photoUrl, 50),
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      border: Border.all(color: colorAccent, width: 1)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Text(
-                      order.car.carNumber,
-                      style: TextStyle(color: colorAccent, fontSize: 14),
-                    ),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    _buildButton("Відхилити", _askDecline),
+                    _buildButton("Прийняти", _accept),
+                  ],
                 ),
-                Text(
-                  order.car.carModel,
-                  style: TextStyle(color: colorAccent, fontSize: 16),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Text(
-                order.goods[0].name + " " + order.goods[0].count.toString() + "т",
-                style: TextStyle(color: colorAccent, fontSize: 14),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    order.driver.getFullName(),
-                    maxLines: 1,
-                    softWrap: true,
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(
-                        color: colorAccent,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    order.driver.phone,
-                    maxLines: 1,
-                    softWrap: true,
-                    overflow: TextOverflow.fade,
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      color: colorAccent,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    "Номер причіпу ",
-                    style: TextStyle(color: colorAccent),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                        border: Border.all(color: colorAccent, width: 1)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Text(
-                        order.car.trailerNumber,
-                        style: TextStyle(color: colorAccent, fontSize: 14),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    //getUserAvatar(order.driver.photoUrl, 50),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                          border: Border.all(color: colorAccent, width: 1)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Text(
+                          _bloc.order.car.carNumber,
+                          style: TextStyle(color: colorAccent, fontSize: 14),
+                        ),
                       ),
                     ),
+                    Text(
+                      _bloc.order.car.carModel,
+                      style: TextStyle(color: colorAccent, fontSize: 16),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Text(
+                    _bloc.order.goods[0].name +
+                        " " +
+                        _bloc.order.goods[0].count.toString() +
+                        "т",
+                    style: TextStyle(color: colorAccent, fontSize: 14),
                   ),
-                ],
-              ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        _bloc.order.driver.getFullName(),
+                        maxLines: 1,
+                        softWrap: true,
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(
+                            color: colorAccent,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        _bloc.order.driver.phone,
+                        maxLines: 1,
+                        softWrap: true,
+                        overflow: TextOverflow.fade,
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          color: colorAccent,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Номер причіпу ",
+                        style: TextStyle(color: colorAccent),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5.0)),
+                            border: Border.all(color: colorAccent, width: 1)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: Text(
+                            _bloc.order.car.trailerNumber,
+                            style: TextStyle(color: colorAccent, fontSize: 14),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    'Список пломб',
+                    style: TextStyle(color: colorAccent),
+                  ),
+                ),
+                _buildStampsItem(_bloc.order),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    'Вантаж',
+                    style: TextStyle(color: colorAccent),
+                  ),
+                ),
+                _buildGoodsItem(_bloc.order),
+                _builditem("Власник перевізника", _bloc.order.owner),
+                _builditem("Пункт відвантаження", _bloc.order.from),
+                _builditem("Пункт розвантаження", _bloc.order.to),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Text(
-                'Список пломб',
-                style: TextStyle(color: colorAccent),
-              ),
-            ),
-            _buildStampsItem(order),
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Text(
-                'Вантаж',
-                style: TextStyle(color: colorAccent),
-              ),
-            ),
-            _buildGoodsItem(order),
-            _builditem("Власник перевізника", order.owner),
-            _builditem("Пункт відвантаження", order.from),
-            _builditem("Пункт розвантаження", order.to),
-          ],
+          ),
         ),
       ),
     );
   }
 
   Column _buildStampsItem(Order order) {
-    return Column(
-        children: order.stamps
-            .map((stamp) => Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 2.5,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Container(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            stamp.stampNumber,
-                            style: TextStyle(color: colorAccent),
-                          ),
-                          CupertinoSwitch(
-                            onChanged: (value) {},
-                            value: stamp.stampStatus,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ))
-            .toList());
+    List<Widget> children = [];
+    for (int i = 0; i < order.stamps.length; ++i) {
+      children.add(Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 2.5,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Container(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  order.stamps[i].stampNumber,
+                  style: TextStyle(color: colorAccent),
+                ),
+                CupertinoSwitch(
+                  onChanged: (value) {
+                    _bloc.stamps[i] = value;
+                    setState(() {});
+                  },
+                  value: _bloc.stamps[i],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ));
+    }
+
+    return Column(children: children);
   }
 
   Column _buildGoodsItem(Order order) {
@@ -249,14 +270,22 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail> {
     );
   }
 
-  void _askDecline(){
-    showAlert(context, "Відхилення", "Ви впевнеі, що бажаєте віхилити?", _decline);
+  void _askDecline() {
+    showAlert(
+        context, "Відхилення", "Ви впевнеі, що бажаєте віхилити?", _decline);
   }
-  void _accept(){
-    showMessage("Типу прийнто");
+
+  void _accept() {
+    _bloc.accept();
   }
-  void _decline(){
+
+  void _decline() {
     showMessage("Типу відхилено");
   }
 
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
 }
