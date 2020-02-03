@@ -1,6 +1,8 @@
 import 'package:elevator/res/values/colors.dart';
 import 'package:elevator/src/core/bloc/base_bloc_listener.dart';
 import 'package:elevator/src/core/bloc/base_bloc_state.dart';
+import 'package:elevator/src/core/bloc/loading_state.dart';
+import 'package:elevator/src/core/bloc/no_loading_state.dart';
 import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/view/login/login_bloc.dart';
@@ -44,12 +46,22 @@ class _LoginScreenState extends BaseStatefulScreen<LoginScreen>
                 ),
               ),
               BlocBuilder<LoginBloc, DoubleBlocState>(
+                condition: (prevState, state){
+                  print(state.lastSuccessState);
+                  if(state.lastSuccessState is LoadingState)
+                    return false;
+                  if(state.lastSuccessState is NoLoadingState)
+                    return false;
+
+                  return true;
+                },
                 builder: (context, state) {
                   if (state.lastSuccessState is LoginStatePhone) {
                     return PhoneSignInSection();
-                  } else {
+                  } else if (state.lastSuccessState is LoginStateVerification){
                     return VerifySection();
                   }
+                  else return Offstage();
                 },
               )
             ],

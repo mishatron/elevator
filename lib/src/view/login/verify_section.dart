@@ -77,7 +77,8 @@ class _PhoneSignInSectionState extends BaseState<VerifySection> {
         showMessage("Введіть код");
       }
     } catch (err) {
-      showMessage("Помилка входу. Перевірте код");
+      print(err);
+      showMessage("Помилка входу. Перевірте код та номер телефону");
     }
     _bloc.add(NoLoadingState());
   }

@@ -1,4 +1,5 @@
 import 'package:elevator/res/values/colors.dart';
+import 'package:elevator/res/values/strings.dart';
 import 'package:elevator/res/values/styles.dart';
 import 'package:elevator/router/navigation_service.dart';
 import 'package:elevator/router/route_paths.dart';
@@ -93,7 +94,10 @@ class _PhoneSignInSectionState extends BaseState<PhoneSignInSection> {
 
     final PhoneVerificationFailed verificationFailed =
         (AuthException authException) {
-      showMessage("Ви ввели невірний номер телефону");
+      if (authException.message.contains("A network error"))
+        onShowMessage(noInternetError);
+      else
+        showMessage("Ви ввели невірний номер телефону");
     };
 
     final PhoneCodeSent codeSent =
@@ -108,7 +112,7 @@ class _PhoneSignInSectionState extends BaseState<PhoneSignInSection> {
       _bloc.verificationId = verificationId;
     };
 
-    if(_phoneNumberController.text.isNotEmpty) {
+    if (_phoneNumberController.text.isNotEmpty) {
       hideKeyboard();
       _bloc.add(LoadingState());
 
