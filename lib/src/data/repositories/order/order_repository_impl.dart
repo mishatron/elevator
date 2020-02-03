@@ -15,9 +15,7 @@ class OrderRepositoryImpl extends OrderRepository {
 
   @override
   Stream<QuerySnapshot> getCars() {
-    return Firestore.instance
-        .collection('cars')
-        .snapshots();
+    return Firestore.instance.collection('cars').snapshots();
   }
 
   @override
@@ -50,5 +48,14 @@ class OrderRepositoryImpl extends OrderRepository {
         .collection('orders')
         .where("type", isEqualTo: 1)
         .snapshots();
+  }
+
+  @override
+  Future<void> moveToHistory(Order order) async {
+    await Firestore.instance.collection('orders').document(order.id).delete();
+    await Firestore.instance
+        .collection('history')
+        .document(order.id)
+        .setData(order.toJson());
   }
 }

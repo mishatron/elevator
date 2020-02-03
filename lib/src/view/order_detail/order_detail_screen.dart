@@ -280,7 +280,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
   }
 
   void _decline() {
-    showMessage("Типу відхилено");
+    _bloc.decline();
   }
 
   @override

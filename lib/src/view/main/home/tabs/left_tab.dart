@@ -34,11 +34,13 @@ class _LeftTabState extends BaseState<LeftTab> {
       stream: _bloc.getOutputOrders(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) return getProgress(background: false);
-        return ListView(
+        return ListView.builder(
+          itemCount: snapshot.data.documents.length,
           controller: widget.hideButtonController,
-          children: snapshot.data.documents.map((document) {
-            return ListItem(Order.fromJsonMap(document.data));
-          }).toList(),
+          itemBuilder: (context, index) {
+            return ListItem(
+                Order.fromJsonMap(snapshot.data.documents[index].data));
+          },
         );
       },
     );
