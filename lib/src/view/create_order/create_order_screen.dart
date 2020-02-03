@@ -85,6 +85,7 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
   @override
   void dispose() {
     _bloc.close();
+    subscription.cancel();
     super.dispose();
   }
 
@@ -164,7 +165,7 @@ class CarInfoState extends BaseState<CarInfo> {
               if (!snapshot.hasData) return getProgress(background: false);
               _dropDownMenuItems = snapshot.data.documents.map((document) {
                 var cars =  Car.fromJsonMap(document.data);
-                DropdownMenuItem(
+                return DropdownMenuItem(
                   value: cars,
                   child: Text(cars.carNumber),
                 );
@@ -172,7 +173,7 @@ class CarInfoState extends BaseState<CarInfo> {
               return DropdownButton(
                   isExpanded: true,
                   value: _selectedCar ,
-                  hint: Text("text"),
+                  hint: Text("Виберіть авто"),
                   items: _dropDownMenuItems,
                   onChanged: (val){
                     setState(() {
