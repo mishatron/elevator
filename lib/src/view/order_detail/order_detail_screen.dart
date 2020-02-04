@@ -6,6 +6,7 @@ import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/view/custom/BaseButton.dart';
 import 'package:elevator/src/view/order_detail/order_details_bloc.dart';
+import 'package:elevator/src/view/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,13 +40,19 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                _bloc.isHistory ? Offstage() : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _buildButton("Відхилити", _askDecline),
-                    _buildButton("Прийняти", _accept),
-                  ],
-                ),
+                _bloc.isHistory
+                    ? Text(
+                        "Час зміни статуса: " +
+                            getHistoryDate(_bloc.order.timeStatus).toString(),
+                        style: TextStyle(fontSize: 21),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          _buildButton("Відхилити", _askDecline),
+                          _buildButton("Прийняти", _accept),
+                        ],
+                      ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -179,10 +186,12 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                   style: TextStyle(color: colorAccent),
                 ),
                 CupertinoSwitch(
-                  onChanged: _bloc.isHistory ? null : (value) {
-                    _bloc.stamps[i] = value;
-                    setState(() {});
-                  },
+                  onChanged: _bloc.isHistory
+                      ? null
+                      : (value) {
+                          _bloc.stamps[i] = value;
+                          setState(() {});
+                        },
                   value: _bloc.stamps[i],
                 ),
               ],
