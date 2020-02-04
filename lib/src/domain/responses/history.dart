@@ -5,6 +5,8 @@ class History {
   Order order;
   String guardId;
 
+  History(this.id, this.order, this.guardId);
+
   History.fromJsonMap(Map<dynamic, dynamic> map)
       : order = map["order"] != null ? Order.fromJsonMap(map["order"]) : null,
         guardId = map["guardId"],

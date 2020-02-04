@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elevator/src/core/ui/base_state.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
+import 'package:elevator/src/domain/responses/history.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/view/main/history/history_bloc.dart';
 import 'package:elevator/src/view/main/home/home_bloc.dart';
@@ -36,7 +37,7 @@ class _LeftHistoryTabState extends BaseState<LeftHistoryTab> {
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) {
             return ListItem(
-                Order.fromJsonMap(snapshot.data.documents[index].data));
+                History.fromJsonMap(snapshot.data.documents[index].data).order);
           },
         );
       },

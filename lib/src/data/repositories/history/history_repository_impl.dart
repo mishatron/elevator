@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elevator/src/data/repositories/history/history_repository.dart';
+import 'package:elevator/src/domain/responses/history.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 
 class HistoryRepositoryImpl extends HistoryRepository {
@@ -7,8 +8,8 @@ class HistoryRepositoryImpl extends HistoryRepository {
   Stream<QuerySnapshot> getInputOrders() {
     return Firestore.instance
         .collection('history')
-        .where("type", isEqualTo: 0)
-        .orderBy('timeStatus', descending: true)
+        .where("order.type", isEqualTo: 0)
+        .orderBy('order.timeStatus', descending: true)
         .snapshots();
   }
 
@@ -16,8 +17,8 @@ class HistoryRepositoryImpl extends HistoryRepository {
   Stream<QuerySnapshot> getOutputOrders() {
     return Firestore.instance
         .collection('history')
-        .where("type", isEqualTo: 1)
-        .orderBy('timeStatus', descending: true)
+        .where("order.type", isEqualTo: 1)
+        .orderBy('order.timeStatus', descending: true)
         .snapshots();
   }
 
@@ -35,7 +36,7 @@ class HistoryRepositoryImpl extends HistoryRepository {
         .getDocuments()
         .then((snapshot) {
       return snapshot.documents.map((doc) {
-        return Order.fromJsonMap(doc.data);
+        return History.fromJsonMap(doc.data).order;
       }).toList();
     });
   }
@@ -54,7 +55,7 @@ class HistoryRepositoryImpl extends HistoryRepository {
         .getDocuments()
         .then((snapshot) {
       return snapshot.documents.map((doc) {
-        return Order.fromJsonMap(doc.data);
+        return History.fromJsonMap(doc.data).order;
       }).toList();
     });
   }

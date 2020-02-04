@@ -6,6 +6,7 @@ import 'package:elevator/src/data/repositories/order/order_repository.dart';
 import 'package:elevator/src/di/dependency_injection.dart';
 import 'package:elevator/src/domain/responses/car.dart';
 import 'package:elevator/src/domain/responses/driver.dart';
+import 'package:elevator/src/domain/responses/history.dart';
 import 'package:elevator/src/domain/responses/order/good.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/domain/responses/order/stamp.dart';
@@ -41,7 +42,7 @@ class _EnteredHistoryTabState extends BaseState<EnteredHistoryTab> {
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) {
             return ListItem(
-                Order.fromJsonMap(snapshot.data.documents[index].data));
+                History.fromJsonMap(snapshot.data.documents[index].data).order);
           },
         );
       },
