@@ -22,10 +22,13 @@ class OrderDetailsBloc extends BaseBloc<BaseBlocState, DoubleBlocState>
   List<bool> stamps = [];
 
   Order get order => _order;
+  bool get isHistory => _order.timeStatus!=-1;
 
   set order(Order value) {
     _order = value;
-    stamps = List.filled(value.stamps.length, false);
+    value.stamps.forEach((stamp) {
+      stamps.add(stamp.stampStatus);
+    });
   }
 
   void accept() async {

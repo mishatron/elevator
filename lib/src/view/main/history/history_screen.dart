@@ -27,6 +27,22 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
   @override
   Widget buildAppbar() {
     return getAppBar(context, 'Історія',
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: colorAccent,
+            ),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.calendar_today,
+              color: colorAccent,
+            ),
+            onPressed: chooseDate,
+          ),
+        ],
         bottom: TabBar(
           labelColor: colorAccent,
           indicatorColor: colorAccent,
@@ -72,6 +88,15 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
           },
         ),
       ),
+    );
+  }
+
+  Future<Null> chooseDate() async {
+    DateTime selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2019),
+      lastDate: DateTime.now(),
     );
   }
 

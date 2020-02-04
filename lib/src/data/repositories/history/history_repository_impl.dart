@@ -7,6 +7,7 @@ class HistoryRepositoryImpl extends HistoryRepository {
     return Firestore.instance
         .collection('history')
         .where("type", isEqualTo: 0)
+        .orderBy('timeStatus', descending: true)
         .snapshots();
   }
 
@@ -15,6 +16,7 @@ class HistoryRepositoryImpl extends HistoryRepository {
     return Firestore.instance
         .collection('history')
         .where("type", isEqualTo: 1)
+        .orderBy('timeStatus', descending: true)
         .snapshots();
   }
 }

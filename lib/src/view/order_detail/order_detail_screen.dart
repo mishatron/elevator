@@ -39,7 +39,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
+                _bloc.isHistory ? Offstage() : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     _buildButton("Відхилити", _askDecline),
@@ -179,7 +179,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                   style: TextStyle(color: colorAccent),
                 ),
                 CupertinoSwitch(
-                  onChanged: (value) {
+                  onChanged: _bloc.isHistory ? null : (value) {
                     _bloc.stamps[i] = value;
                     setState(() {});
                   },
