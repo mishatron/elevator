@@ -16,7 +16,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
 class EnteredHistoryTab extends BaseStatefulWidget {
-
   @override
   State<StatefulWidget> createState() {
     return _EnteredHistoryTabState();
@@ -34,132 +33,18 @@ class _EnteredHistoryTabState extends BaseState<EnteredHistoryTab> {
 
   @override
   Widget getLayout() {
-    return Column(
-      children: <Widget>[
-//        RaisedButton(
-//          child: Text("dsf"),
-//          onPressed: addModel,
-//        ),
-        Expanded(
-          child: StreamBuilder(
-            stream: _bloc.getInputOrders(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) return getProgress(background: false);
-              return ListView.builder(
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) {
-                  return ListItem(
-                      Order.fromJsonMap(snapshot.data.documents[index].data));
-                },
-              );
-            },
-          ),
-        ),
-      ],
+    return StreamBuilder(
+      stream: _bloc.getInputOrders(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) return getProgress(background: false);
+        return ListView.builder(
+          itemCount: snapshot.data.documents.length,
+          itemBuilder: (context, index) {
+            return ListItem(
+                Order.fromJsonMap(snapshot.data.documents[index].data));
+          },
+        );
+      },
     );
-  }
-
-  void addModel() {
-    addCar();
-    addDriver();
-    addOrder();
-  }
-
-  Driver driver = Driver(Uuid().v1(), "Іван", "Іванов", "+380673334455",
-      "ivan@gmail.com", "invalidUrl");
-  Driver driver2 = Driver(Uuid().v1(), "Петро", "Петров", "+380674445566",
-      "petro@gmail.com", "invalidUrl");
-  Car car = Car(Uuid().v1(), "Audi 5X", "АМ 8097 СТ", "АВ 8666 ВА");
-  Car car2 = Car(Uuid().v1(), "ВАЗ 2101", "АМ 0000 СТ", "АВ 1111 ВА");
-
-  void addCar() {
-//    Car car = Car(Uuid().v1(), "Audi 5X", "АМ 8097 СТ", "АВ 8666 ВА");
-//    Car car2 = Car(Uuid().v1(), "ВАЗ 2101", "АМ 0000 СТ", "АВ 1111 ВА");
-    OrderRepository orderRepository = injector.get();
-    orderRepository.addCar(car);
-    orderRepository.addCar(car2);
-  }
-
-  void addDriver() {
-//    Driver driver = Driver(Uuid().v1(), "Іван", "Іванов", "+380673334455",
-//        "ivan@gmail.com", "invalidUrl");
-//    Driver driver2 = Driver(Uuid().v1(), "Петро", "Петров", "+380674445566",
-//        "petro@gmail.com", "invalidUrl");
-    OrderRepository orderRepository = injector.get();
-    orderRepository.addDriver(driver);
-    orderRepository.addDriver(driver2);
-  }
-
-  void addOrder() {
-    List<Stamp> stamps = [
-      Stamp(Uuid().v1(), "012345", false),
-      Stamp(Uuid().v1(), "123456", false),
-      Stamp(Uuid().v1(), "234567", false),
-      Stamp(Uuid().v1(), "345678", false),
-    ];
-
-    List<Good> goods = [
-      Good(Uuid().v1(), "Зерно 1", 5),
-      Good(Uuid().v1(), "Зерно 2", 10),
-      Good(Uuid().v1(), "Зерно 3", 15),
-    ];
-    Order order = Order(
-        Uuid().v1(),
-        0,
-        0,
-        -1,
-        stamps,
-        goods,
-        "Петренко Василь Іванович",
-        "Вінниця",
-        "Київ",
-        DateTime.now().millisecondsSinceEpoch,
-        driver,
-        car);
-    Order order2 = Order(
-        Uuid().v1(),
-        0,
-        0,
-        -1,
-        stamps,
-        goods,
-        "Петренко Василь Іванович",
-        "Вінниця",
-        "Київ",
-        DateTime.now().millisecondsSinceEpoch,
-        driver2,
-        car2);
-    Order order3 = Order(
-        Uuid().v1(),
-        1,
-        0,
-        -1,
-        stamps,
-        goods,
-        "Петренко Василь Іванович",
-        "Вінниця",
-        "Київ",
-        DateTime.now().millisecondsSinceEpoch,
-        driver,
-        car2);
-    Order order4 = Order(
-        Uuid().v1(),
-        1,
-        0,
-        -1,
-        stamps,
-        goods,
-        "Петренко Василь Іванович",
-        "Вінниця",
-        "Київ",
-        DateTime.now().millisecondsSinceEpoch,
-        driver2,
-        car);
-    OrderRepository orderRepository = injector.get();
-    orderRepository.addOrder(order);
-    orderRepository.addOrder(order2);
-    orderRepository.addOrder(order3);
-    orderRepository.addOrder(order4);
   }
 }
