@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elevator/src/data/repositories/order/order_repository.dart';
 import 'package:elevator/src/domain/responses/car.dart';
 import 'package:elevator/src/domain/responses/driver.dart';
+import 'package:elevator/src/domain/responses/history.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uuid/uuid.dart';
 
 class OrderRepositoryImpl extends OrderRepository {
   @override
@@ -15,9 +18,7 @@ class OrderRepositoryImpl extends OrderRepository {
 
   @override
   Stream<QuerySnapshot> getCars() {
-    return Firestore.instance
-        .collection('cars')
-        .snapshots();
+    return Firestore.instance.collection('cars').snapshots();
   }
 
 
@@ -58,5 +59,16 @@ class OrderRepositoryImpl extends OrderRepository {
         .collection('orders')
         .where("type", isEqualTo: 1)
         .snapshots();
+  }
+
+  @override
+  Future<void> moveToHistory(Order order) async {
+    await Firestore.instance.collection('orders').document(order.id).delete();
+    String guardId = (await FirebaseAuth.instance.currentUser()).uid;
+    History history = History(Uuid().v1(), order, guardId);
+    await Firestore.instance
+        .collection('history')
+        .document(history.id)
+        .setData(history.toJson());
   }
 }

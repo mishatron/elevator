@@ -16,6 +16,8 @@ abstract class OrderRepository extends BaseRepository {
   Stream<QuerySnapshot> getOutputOrders();
 
   Stream<QuerySnapshot> getCars();
-
+  
   Stream<QuerySnapshot> getDrivers();
+
+  Future<void> moveToHistory(Order order);
 }

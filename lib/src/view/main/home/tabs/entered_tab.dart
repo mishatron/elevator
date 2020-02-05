@@ -16,6 +16,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
 class EnteredTab extends BaseStatefulWidget {
+  final ScrollController hideButtonController;
+
+  EnteredTab(this.hideButtonController);
+
   @override
   State<StatefulWidget> createState() {
     return _EnteredTabState();
@@ -45,10 +49,13 @@ class _EnteredTabState extends BaseState<EnteredTab> {
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) return getProgress(background: false);
-              return ListView(
-                children: snapshot.data.documents.map((document) {
-                  return ListItem(Order.fromJsonMap(document.data));
-                }).toList(),
+              return ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                controller: widget.hideButtonController,
+                itemBuilder: (context, index) {
+                  return ListItem(
+                      Order.fromJsonMap(snapshot.data.documents[index].data));
+                },
               );
             },
           ),

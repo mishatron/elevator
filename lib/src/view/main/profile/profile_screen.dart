@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:elevator/res/values/colors.dart';
 import 'package:elevator/res/values/styles.dart';
 import 'package:elevator/src/core/bloc/base_bloc_listener.dart';
@@ -10,6 +12,8 @@ import 'package:elevator/src/view/main/profile/profile_bloc.dart';
 import 'package:elevator/src/view/utils/image_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends BaseStatefulWidget {
   @override
@@ -59,13 +63,16 @@ class _ProfileScreenState extends BaseStatefulScreen<ProfileScreen>
               getUserAvatar(_bloc.user.photoUrl, 100),
               Positioned(
                 right: -16,
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration:
-                      BoxDecoration(color: colorAccent, shape: BoxShape.circle),
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
+                child: InkWell(
+                  onTap: _pickPhoto,
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration:
+                        BoxDecoration(color: colorAccent, shape: BoxShape.circle),
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    )
                   ),
                 ),
               )
@@ -108,6 +115,32 @@ class _ProfileScreenState extends BaseStatefulScreen<ProfileScreen>
     showAlert(context, 'Вихід', 'Ви впевнені, що хочете вийти?', () {
       _bloc.logout();
     });
+  }
+
+  Future _pickPhoto() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      image = await _cropLogo(image);
+    }
+  }
+
+  Future<File> _cropLogo(File imageFile) async {
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: imageFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+        ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: colorAccent,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          minimumAspectRatio: 1.0,
+        ));
+    return croppedFile;
   }
 
   @override

@@ -1,52 +1,35 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:elevator/res/values/colors.dart';
 import 'package:elevator/res/values/styles.dart';
-import 'package:elevator/router/navigation_service.dart';
-import 'package:elevator/router/route_paths.dart';
 import 'package:elevator/src/core/bloc/base_bloc_listener.dart';
 import 'package:elevator/src/core/bloc/base_bloc_state.dart';
 import 'package:elevator/src/core/bundle.dart';
 import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
-import 'package:elevator/src/di/dependency_injection.dart';
-import 'package:elevator/src/view/main/history/history_bloc.dart';
-import 'package:elevator/src/view/main/history/tabs/entered_history_tab.dart';
-import 'package:elevator/src/view/main/history/tabs/left_history_tab.dart';
+import 'package:elevator/src/view/main/history/filter/history_filter_bloc.dart';
+import 'package:elevator/src/view/main/history/filter/tabs/entered_history_filter_tab.dart';
+import 'package:elevator/src/view/main/history/filter/tabs/left_history_filter_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HistoryScreen extends BaseStatefulWidget {
+class HistoryFilterScreen extends BaseStatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _HistoryScreenState();
+    return _HistoryFilterScreenState();
   }
 }
 
-class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
-    with BaseBlocListener {
-  HistoryBloc _bloc = HistoryBloc();
+class _HistoryFilterScreenState extends BaseStatefulScreen<HistoryFilterScreen>
+    with BaseBlocListener, AfterLayoutMixin<HistoryFilterScreen> {
+  HistoryFilterBloc _bloc = HistoryFilterBloc();
 
-  List<Widget> tabs = [EnteredHistoryTab(), LeftHistoryTab()];
+  List<Widget> tabs = [EnteredHistoryFilterTab(), LeftHistoryFilterTab()];
 
   @override
   Widget buildAppbar() {
     return getAppBar(context, 'Історія',
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: colorAccent,
-            ),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.calendar_today,
-              color: colorAccent,
-            ),
-            onPressed: chooseDate,
-          ),
-        ],
+        leading: getBack(),
         bottom: TabBar(
           labelColor: colorAccent,
           indicatorColor: colorAccent,
@@ -84,7 +67,7 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
       child: BlocListener(
         bloc: _bloc,
         listener: blocListener,
-        child: BlocBuilder<HistoryBloc, DoubleBlocState>(
+        child: BlocBuilder<HistoryFilterBloc, DoubleBlocState>(
           builder: (context, state) {
             return TabBarView(
               children: tabs,
@@ -95,21 +78,15 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
     );
   }
 
-  Future<Null> chooseDate() async {
-    DateTime selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2019),
-      lastDate: DateTime.now(),
-    );
-    Bundle bundle = Bundle();
-    bundle.putDynamic("date", selectedDate);
-    injector<NavigationService>().pushNamed(filteredHistoryRoute, arguments: bundle);
-  }
-
   @override
   void dispose() {
     _bloc.close();
     super.dispose();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    _bloc.loadFilteredData((ModalRoute.of(context).settings.arguments as Bundle)
+        .getDynamic("date") as DateTime);
   }
 }

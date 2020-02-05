@@ -15,8 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'list_item.dart';
-
 class HomeScreen extends BaseStatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -30,7 +28,7 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
   ScrollController _hideButtonController;
   bool _isFabVisible = true;
 
-  List<Widget> tabs = [EnteredTab(), LeftTab()];
+  List<Widget> tabs = [];
 
   @override
   void initState() {
@@ -55,6 +53,8 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
         }
       }
     });
+    tabs.add(EnteredTab(_hideButtonController));
+    tabs.add(LeftTab(_hideButtonController));
   }
 
   @override

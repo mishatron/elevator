@@ -40,6 +40,9 @@ dependencies:
   cloud_firestore: ^0.13.0+1
   uuid: ^2.0.4
   equatable: ^1.0.3
+  after_layout: ^1.0.7+2
+  image_picker: ^0.6.2+3
+  image_cropper: ^1.1.0
 
 dev_dependencies:
   flutter_test:

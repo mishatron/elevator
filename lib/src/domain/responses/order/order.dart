@@ -2,8 +2,9 @@ import 'package:elevator/src/domain/responses/car.dart';
 import 'package:elevator/src/domain/responses/driver.dart';
 import 'package:elevator/src/domain/responses/order/good.dart';
 import 'package:elevator/src/domain/responses/order/stamp.dart';
+import 'package:equatable/equatable.dart';
 
-class Order {
+class Order extends Equatable {
   String id;
   int type;
   int status;
@@ -64,4 +65,20 @@ class Order {
     data['car'] = car.toJson();
     return data;
   }
+
+  @override
+  List<Object> get props => [
+        this.id,
+        this.type,
+        this.status,
+        this.timeStatus,
+        this.stamps,
+        this.goods,
+        this.owner,
+        this.from,
+        this.to,
+        this.createdAt,
+        this.driver,
+        this.car
+      ];
 }
