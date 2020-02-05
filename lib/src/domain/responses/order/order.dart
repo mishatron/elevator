@@ -18,19 +18,19 @@ class Order extends Equatable {
   Driver driver;
   Car car;
 
-  Order(
-      this.id,
-      this.type,
-      this.status,
-      this.timeStatus,
-      this.stamps,
-      this.goods,
-      this.owner,
-      this.from,
-      this.to,
-      this.createdAt,
-      this.driver,
-      this.car);
+  Order({this.id,
+    this.type,
+    this.status,
+    this.timeStatus,
+    this.stamps,
+    this.goods,
+    this.owner,
+    this.from,
+    this.to,
+    this.createdAt,
+    this.driver,
+    this.car}
+      );
 
   Order.fromJsonMap(Map<dynamic, dynamic> map)
       : id = map["id"],

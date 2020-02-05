@@ -11,8 +11,10 @@ import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/di/dependency_injection.dart';
 import 'package:elevator/src/domain/responses/car.dart';
 import 'package:elevator/src/domain/responses/driver.dart';
+import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/view/create_order/create_order_bloc.dart';
 import 'package:elevator/src/view/custom/BaseButton.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -150,63 +152,164 @@ class CarInfoState extends BaseState<CarInfo> {
         key: UniqueKey(),
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            "Інформація про автомобіль",
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: colorAccent),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.5),
+            child: Text(
+              "Інформація про автомобіль",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: colorAccent),
+            ),
           ),
-          Text(
-            "Виберіть автомобіль із списку або заповніть дані",
-            maxLines: 2,
-            style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: colorAccent),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.5),
+            child: Text(
+              "Виберіть автомобіль із списку або заповніть дані",
+              maxLines: 2,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: colorAccent),
+            ),
           ),
           StreamBuilder(
             stream: _bloc.getCars(),
-            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) return getProgress(background: false);
               _dropDownMenuItems = snapshot.data.documents.map((document) {
-                var cars =  Car.fromJsonMap(document.data);
+                var cars = Car.fromJsonMap(document.data);
                 return DropdownMenuItem(
                   value: cars,
                   child: Text(cars.carNumber),
                 );
               }).toList();
-              return DropdownButton(
-                  isExpanded: true,
-                  value: _selectedCar ,
-                  hint: Text("Виберіть авто"),
-                  items: _dropDownMenuItems,
-                  onChanged: (val){
-                    setState(() {
-                      _carNumberController.text = _selectedCar.carNumber;
-                      _carModelController.text = _selectedCar.carModel;
-                      _trailerNumberController.text = _selectedCar.trailerNumber;
-                      _selectedCar = val;
-                    });
-                  }
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 2.5),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      border: Border.all(color: colorAccent, width: 1)),
+                  child: DropdownButtonHideUnderline(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: DropdownButton(
+                          iconEnabledColor: colorAccent,
+                          iconDisabledColor: colorAccent,
+                          isExpanded: true,
+                          value: _selectedCar,
+                          hint: Text(
+                            "Виберіть авто",
+                            style: TextStyle(color: colorAccent),
+                          ),
+                          items: _dropDownMenuItems,
+                          onChanged: (val) {
+                            setState(() {
+                              _selectedCar = val;
+                              _carNumberController.text =
+                                  _selectedCar.carNumber;
+                              _carModelController.text = _selectedCar.carModel;
+                              _trailerNumberController.text =
+                                  _selectedCar.trailerNumber;
+                            });
+                          }),
+                    ),
+                  ),
+                ),
               );
             },
           ),
           Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text("Номер автомобіля"),
-                TextField(
-                  decoration: InputDecoration(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                side: BorderSide(width: 1, color: colorAccent)),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Номер автомобіля",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
                   ),
-                  controller: _carNumberController,
-                ),
-                Text("Марка автомобіля"),
-                TextField(
-                  controller: _carModelController,
-                ),
-                Text("Номер причіпу"),
-                TextField(
-                  controller: _trailerNumberController,
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: TextField(
+                      onChanged: ((String text) {
+                        _bloc.order.car.carNumber = text;
+                      }),
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                      ),
+                      controller: _carNumberController,
+                    ),
+                  ),
+                  Text(
+                    "Марка автомобіля",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: TextField(
+                      onChanged: ((String text) {
+                        _bloc.order.car.carModel = text;
+                      }),
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                      ),
+                      controller: _carModelController,
+                    ),
+                  ),
+                  Text(
+                    "Номер причіпу",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: TextField(
+                      onChanged: ((String text) {
+                        _bloc.order.car.trailerNumber = text;
+                      }),
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                      ),
+                      controller: _trailerNumberController,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Padding(
@@ -278,65 +381,191 @@ class DriverInfoState extends BaseState<DriverInfo> {
         key: UniqueKey(),
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            "Інформація про водія",
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: colorAccent),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.5),
+            child: Text(
+              "Інформація про водія",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: colorAccent),
+            ),
           ),
-          Text(
-            "Виберіть водія із списку або заповніть дані",
-            maxLines: 2,
-            style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: colorAccent),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.5),
+            child: Text(
+              "Виберіть водія із списку або заповніть дані",
+              maxLines: 2,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: colorAccent),
+            ),
           ),
           StreamBuilder(
             stream: _bloc.getDrivers(),
-            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) return getProgress(background: false);
               _dropDownMenuItems = snapshot.data.documents.map((document) {
-                var drivers =  Driver.fromJsonMap(document.data);
+                var drivers = Driver.fromJsonMap(document.data);
                 return DropdownMenuItem(
                   value: drivers,
                   child: Text(drivers.getFullName()),
                 );
               }).toList();
-              return DropdownButton(
-                  isExpanded: true,
-                  value: _selectedDriver ,
-                  hint: Text("Виберіть водія"),
-                  items: _dropDownMenuItems,
-                  onChanged: (val){
-                    setState(() {
-                      _driverFirstNameController.text = _selectedDriver.firstName;
-                      _driverLastNameController.text = _selectedDriver.lastName;
-                      _driverPhoneController.text = _selectedDriver.phone;
-                      _driverEmailController.text = _selectedDriver.email;
-                      _selectedDriver = val;
-                    });
-                  }
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 2.5),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      border: Border.all(color: colorAccent, width: 1)),
+                  child: DropdownButtonHideUnderline(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: DropdownButton(
+                          isExpanded: true,
+                          value: _selectedDriver,
+                          hint: Text(
+                            "Виберіть водія",
+                            style: TextStyle(color: colorAccent),
+                          ),
+                          items: _dropDownMenuItems,
+                          onChanged: (val) {
+                            setState(() {
+                              _selectedDriver = val;
+                              _driverFirstNameController.text =
+                                  _selectedDriver.firstName;
+                              _driverLastNameController.text =
+                                  _selectedDriver.lastName;
+                              _driverPhoneController.text =
+                                  _selectedDriver.phone;
+                              _driverEmailController.text =
+                                  _selectedDriver.email;
+                            });
+                          }),
+                    ),
+                  ),
+                ),
               );
             },
           ),
           Card(
-            child: Column(
-              children: <Widget>[
-                Text("Ім'я водія"),
-                TextField(
-                  controller: _driverFirstNameController,
-                ),
-                Text("Прізвище водія"),
-                TextField(
-                  controller: _driverLastNameController,
-                ),
-                Text("Номер телефону водія"),
-                TextField(
-                  controller: _driverPhoneController,
-                ),
-                Text("Електронна пошта водія"),
-                TextField(
-                  controller: _driverEmailController,
-                ),
-              ],
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                side: BorderSide(width: 1, color: colorAccent)),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Ім'я водія",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: TextField(
+                      onChanged: ((String text) {
+                        _bloc.order.driver.firstName = text;
+                      }),
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                      ),
+                      controller: _driverFirstNameController,
+                    ),
+                  ),
+                  Text(
+                    "Прізвище водія",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: TextField(
+                      onChanged: ((String text) {
+                        _bloc.order.driver.lastName = text;
+                      }),
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                      ),
+                      controller: _driverLastNameController,
+                    ),
+                  ),
+                  Text(
+                    "Номер телефону водія",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: TextField(
+                      onChanged: ((String text) {
+                        _bloc.order.driver.phone = text;
+                      }),
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                      ),
+                      controller: _driverPhoneController,
+                    ),
+                  ),
+                  Text(
+                    "Електронна пошта водія",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: TextField(
+                      onChanged: ((String text) {
+                        _bloc.order.driver.email = text;
+                      }),
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                      ),
+                      controller: _driverEmailController,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Padding(
@@ -386,9 +615,9 @@ class OrderInfo extends BaseStatefulWidget {
 }
 
 class OrderInfoState extends BaseState<OrderInfo> {
-  var _ethereumController = TextEditingController();
-  var _entranceFeeController = TextEditingController();
-  var _matchController = TextEditingController();
+  var _orderOwnerController = TextEditingController();
+  var _orderToController = TextEditingController();
+  var _orderFromController = TextEditingController();
   CreateOrderBloc _bloc;
 
   @override
@@ -415,6 +644,97 @@ class OrderInfoState extends BaseState<OrderInfo> {
             maxLines: 2,
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold, color: colorAccent),
+          ),
+          Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                side: BorderSide(width: 1, color: colorAccent)),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Власник перевізника",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: TextField(
+                      onChanged: ((String text) {
+                        _bloc.order.owner = text;
+                      }),
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                      ),
+                      controller: _orderOwnerController,
+                    ),
+                  ),
+                  Text(
+                    "Пункт відвантаження",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: TextField(
+                      onChanged: ((String text) {
+                        _bloc.order.from = text;
+                      }),
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                      ),
+                      controller: _orderFromController,
+                    ),
+                  ),
+                  Text(
+                    "Пункт розвантаження",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: TextField(
+                      onChanged: ((String text) {
+                        _bloc.order.to = text;
+                      }),
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: colorAccent, width: 1),
+                        ),
+                      ),
+                      controller: _orderToController,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 30),
