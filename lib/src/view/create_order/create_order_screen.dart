@@ -10,6 +10,7 @@ import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/di/dependency_injection.dart';
 import 'package:elevator/src/domain/responses/car.dart';
+import 'package:elevator/src/domain/responses/driver.dart';
 import 'package:elevator/src/view/create_order/create_order_bloc.dart';
 import 'package:elevator/src/view/custom/BaseButton.dart';
 import 'package:flutter/material.dart';
@@ -129,8 +130,9 @@ class CarInfo extends BaseStatefulWidget {
 
 class CarInfoState extends BaseState<CarInfo> {
   CreateOrderBloc _bloc;
-  var _poolNameController = TextEditingController();
-  var _poolLocationController = TextEditingController();
+  var _carNumberController = TextEditingController();
+  var _carModelController = TextEditingController();
+  var _trailerNumberController = TextEditingController();
   List<DropdownMenuItem<Car>> _dropDownMenuItems;
   Car _selectedCar;
 
@@ -177,11 +179,35 @@ class CarInfoState extends BaseState<CarInfo> {
                   items: _dropDownMenuItems,
                   onChanged: (val){
                     setState(() {
+                      _carNumberController.text = _selectedCar.carNumber;
+                      _carModelController.text = _selectedCar.carModel;
+                      _trailerNumberController.text = _selectedCar.trailerNumber;
                       _selectedCar = val;
                     });
                   }
               );
             },
+          ),
+          Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("Номер автомобіля"),
+                TextField(
+                  decoration: InputDecoration(
+                  ),
+                  controller: _carNumberController,
+                ),
+                Text("Марка автомобіля"),
+                TextField(
+                  controller: _carModelController,
+                ),
+                Text("Номер причіпу"),
+                TextField(
+                  controller: _trailerNumberController,
+                ),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 30),
@@ -231,8 +257,12 @@ class DriverInfo extends BaseStatefulWidget {
 
 class DriverInfoState extends BaseState<DriverInfo> {
   CreateOrderBloc _bloc;
-  var _descriptionController = TextEditingController();
-  var _interestsController = TextEditingController();
+  var _driverFirstNameController = TextEditingController();
+  var _driverLastNameController = TextEditingController();
+  var _driverEmailController = TextEditingController();
+  var _driverPhoneController = TextEditingController();
+  List<DropdownMenuItem<Driver>> _dropDownMenuItems;
+  Driver _selectedDriver;
 
   @override
   void initState() {
@@ -258,6 +288,56 @@ class DriverInfoState extends BaseState<DriverInfo> {
             maxLines: 2,
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold, color: colorAccent),
+          ),
+          StreamBuilder(
+            stream: _bloc.getDrivers(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) return getProgress(background: false);
+              _dropDownMenuItems = snapshot.data.documents.map((document) {
+                var drivers =  Driver.fromJsonMap(document.data);
+                return DropdownMenuItem(
+                  value: drivers,
+                  child: Text(drivers.getFullName()),
+                );
+              }).toList();
+              return DropdownButton(
+                  isExpanded: true,
+                  value: _selectedDriver ,
+                  hint: Text("Виберіть водія"),
+                  items: _dropDownMenuItems,
+                  onChanged: (val){
+                    setState(() {
+                      _driverFirstNameController.text = _selectedDriver.firstName;
+                      _driverLastNameController.text = _selectedDriver.lastName;
+                      _driverPhoneController.text = _selectedDriver.phone;
+                      _driverEmailController.text = _selectedDriver.email;
+                      _selectedDriver = val;
+                    });
+                  }
+              );
+            },
+          ),
+          Card(
+            child: Column(
+              children: <Widget>[
+                Text("Ім'я водія"),
+                TextField(
+                  controller: _driverFirstNameController,
+                ),
+                Text("Прізвище водія"),
+                TextField(
+                  controller: _driverLastNameController,
+                ),
+                Text("Номер телефону водія"),
+                TextField(
+                  controller: _driverPhoneController,
+                ),
+                Text("Електронна пошта водія"),
+                TextField(
+                  controller: _driverEmailController,
+                ),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 30),

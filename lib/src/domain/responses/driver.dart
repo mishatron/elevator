@@ -1,4 +1,6 @@
-class Driver {
+import 'package:equatable/equatable.dart';
+
+class Driver extends Equatable {
   String id;
   String firstName;
   String lastName;
@@ -31,4 +33,8 @@ class Driver {
   String getFullName() {
     return firstName + " " + lastName;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [id, phone, email, photoUrl, lastName, firstName];
 }

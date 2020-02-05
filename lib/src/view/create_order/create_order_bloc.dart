@@ -40,6 +40,7 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
   DoubleBlocState get initialState => DoubleBlocState(EmptyBlocState(), null);
 
   Stream<QuerySnapshot> getCars() => _orderRepository.getCars();
+  Stream<QuerySnapshot> getDrivers() => _orderRepository.getDrivers();
 
 
   bool isCarInfoValidate() {
