@@ -12,13 +12,17 @@ import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/di/dependency_injection.dart';
 import 'package:elevator/src/domain/responses/car.dart';
 import 'package:elevator/src/domain/responses/driver.dart';
+import 'package:elevator/src/domain/responses/order/good.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/domain/responses/order/stamp.dart';
 import 'package:elevator/src/view/create_order/create_order_bloc.dart';
 import 'package:elevator/src/view/custom/BaseButton.dart';
+import 'package:elevator/src/view/utils/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateOrderScreen extends BaseStatefulWidget {
   @override
@@ -672,8 +676,11 @@ class OrderInfoState extends BaseState<OrderInfo> {
   var _orderOwnerController = TextEditingController();
   var _orderToController = TextEditingController();
   var _orderFromController = TextEditingController();
+  var _stampController = TextEditingController();
+  var _cargoController = TextEditingController();
+  var _weightController = TextEditingController();
   CreateOrderBloc _bloc;
-  Stamp stamp;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -681,249 +688,290 @@ class OrderInfoState extends BaseState<OrderInfo> {
     _bloc = BlocProvider.of(context);
   }
 
+  void _addStampHandler() {
+    Stamp stamp = Stamp(Uuid().v1(), _stampController.text, false);
+    _bloc.order.stamps.add(stamp);
+    _stampController.clear();
+    setState(() {});
+  }
+
+  void _addGoodHandler() {
+    Good good = Good(
+        Uuid().v1(), _cargoController.text, _weightController.text.toInt());
+    _bloc.order.goods.add(good);
+    _cargoController.clear();
+    _weightController.clear();
+    setState(() {});
+  }
+
   @override
   Widget getLayout() {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Column(
-        key: UniqueKey(),
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            "Інформація про замовлення",
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: colorAccent),
-          ),
-          Text(
-            "Заповніть дані",
-            maxLines: 2,
-            style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: colorAccent),
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                side: BorderSide(width: 1, color: colorAccent)),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Вантаж",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Flexible(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: colorAccent, width: 1),
-                              ),
-                              border: const OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: colorAccent, width: 1),
+      child: Form(
+        key: formKey,
+        child: Column(
+          key: UniqueKey(),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "Інформація про замовлення",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: colorAccent),
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  side: BorderSide(width: 1, color: colorAccent)),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Вантаж",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: colorAccent),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: TextFormField(
+                        controller: _cargoController,
+                        decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                          ),
+                          border: const OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Вага",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: colorAccent),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(
+                            child: TextFormField(
+                              keyboardType: TextInputType.numberWithOptions(
+                                  signed: true, decimal: false),
+                              controller: _weightController,
+                              inputFormatters: [
+                                WhitelistingTextInputFormatter.digitsOnly
+                              ],
+                              decoration: InputDecoration(
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: colorAccent, width: 1),
+                                ),
+                                border: const OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: colorAccent, width: 1),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () {
-                              _bloc.order.stamps.add(stamp);
-                            })
-                      ],
+                          IconButton(
+                              icon: Icon(Icons.add), onPressed: _addGoodHandler)
+                        ],
+                      ),
                     ),
-                  ),
-                  _buildGoodsItem(_bloc.order)
-                ],
+                    _buildGoodsItem(_bloc.order)
+                  ],
+                ),
               ),
             ),
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                side: BorderSide(width: 1, color: colorAccent)),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Пломби",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Flexible(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: colorAccent, width: 1),
-                              ),
-                              border: const OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: colorAccent, width: 1),
+            Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  side: BorderSide(width: 1, color: colorAccent)),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Пломби",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: colorAccent),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(
+                            child: TextFormField(
+                              controller: _stampController,
+                              decoration: InputDecoration(
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: colorAccent, width: 1),
+                                ),
+                                border: const OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: colorAccent, width: 1),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () {
-                              _bloc.order.stamps.add(stamp);
-                            })
-                      ],
+                          IconButton(
+                              icon: Icon(Icons.add),
+                              onPressed: _addStampHandler)
+                        ],
+                      ),
                     ),
-                  ),
-                  _buildChips(context: context),
-                ],
+                    _buildStamps(context: context),
+                  ],
+                ),
               ),
             ),
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                side: BorderSide(width: 1, color: colorAccent)),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  side: BorderSide(width: 1, color: colorAccent)),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Власник перевізника",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: colorAccent),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: TextFormField(
+                        onChanged: ((String text) {
+                          _bloc.order.owner = text;
+                        }),
+                        decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                          ),
+                          border: const OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                          ),
+                        ),
+                        controller: _orderOwnerController,
+                      ),
+                    ),
+                    Text(
+                      "Пункт відвантаження",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: colorAccent),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: TextFormField(
+                        onChanged: ((String text) {
+                          _bloc.order.from = text;
+                        }),
+                        decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                          ),
+                          border: const OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                          ),
+                        ),
+                        controller: _orderFromController,
+                      ),
+                    ),
+                    Text(
+                      "Пункт розвантаження",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: colorAccent),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: TextFormField(
+                        onChanged: ((String text) {
+                          _bloc.order.to = text;
+                        }),
+                        decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                          ),
+                          border: const OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                          ),
+                        ),
+                        controller: _orderToController,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Text(
-                    "Власник перевізника",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: TextField(
-                      onChanged: ((String text) {
-                        _bloc.order.owner = text;
-                      }),
-                      decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                      ),
-                      controller: _orderOwnerController,
+                  Flexible(
+                    flex: 2,
+                    child: BaseButton(
+                      onClick: () {
+                        _bloc.streamController
+                            .add(Events.ON_BACK_TO_DRIVER_INFO);
+                      },
+                      text: "Назад",
+                      buttonColor: Colors.white,
+                      borderColor: Colors.grey,
+                      textColor: Colors.grey,
                     ),
                   ),
-                  Text(
-                    "Пункт відвантаження",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: TextField(
-                      onChanged: ((String text) {
-                        _bloc.order.from = text;
-                      }),
-                      decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                      ),
-                      controller: _orderFromController,
-                    ),
-                  ),
-                  Text(
-                    "Пункт розвантаження",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: TextField(
-                      onChanged: ((String text) {
-                        _bloc.order.to = text;
-                      }),
-                      decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                      ),
-                      controller: _orderToController,
+                  Spacer(),
+                  Flexible(
+                    flex: 3,
+                    child: BaseButton(
+                      onClick: () {
+                        _bloc.streamController.add(Events.CREATE_ORDER);
+                      },
+                      text: "Створити",
+                      buttonColor: colorAccent,
+                      borderColor: colorAccent,
+                      textColor: Colors.white,
                     ),
                   ),
                 ],
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Flexible(
-                  flex: 2,
-                  child: BaseButton(
-                    onClick: () {
-                      _bloc.streamController.add(Events.ON_BACK_TO_DRIVER_INFO);
-                    },
-                    text: "Назад",
-                    buttonColor: Colors.white,
-                    borderColor: Colors.grey,
-                    textColor: Colors.grey,
-                  ),
-                ),
-                Spacer(),
-                Flexible(
-                  flex: 3,
-                  child: BaseButton(
-                    onClick: () {
-                      _bloc.streamController.add(Events.CREATE_ORDER);
-                    },
-                    text: "Створити",
-                    buttonColor: colorAccent,
-                    borderColor: colorAccent,
-                    textColor: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildChips({BuildContext context}) {
+  Widget _buildStamps({BuildContext context}) {
     return _bloc.order.stamps != null
         ? Wrap(
             children: _bloc.order.stamps
@@ -944,12 +992,9 @@ class OrderInfoState extends BaseState<OrderInfo> {
                             });
                           },
                           backgroundColor: colorAccent,
-                          label: SizedBox(
-                            width: MediaQuery.of(context).size.width / 4,
-                            child: Text(
-                              item.stampNumber,
-                              style: getMidFontWhite(),
-                            ),
+                          label: Text(
+                            item.stampNumber,
+                            style: getMidFontWhite(),
                           ),
                         ),
                       ),
@@ -958,35 +1003,35 @@ class OrderInfoState extends BaseState<OrderInfo> {
         : Offstage();
   }
 
-  Column _buildGoodsItem(Order order) {
-    return Column(
-        children: order.goods
-            .map((o) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                        border: Border.all(color: colorAccent, width: 1)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            o.name,
-                            style: TextStyle(color: colorAccent),
-                          ),
-                          Text(
-                            o.count.toString() + " т",
-                            style: TextStyle(color: colorAccent),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ))
-            .toList());
+  Widget _buildGoodsItem(Order order) {
+    return _bloc.order.goods != null
+        ? Wrap(
+        children: _bloc.order.goods
+            .map((item) => Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 2.5,
+          ),
+          child: Container(
+            child: Chip(
+              deleteIcon: CircleAvatar(
+                radius: 10,
+                child: FittedBox(
+                    child: Icon(Icons.cancel), fit: BoxFit.contain),
+              ),
+              onDeleted: () {
+                setState(() {
+                  _bloc.order.goods.remove(item);
+                });
+              },
+              backgroundColor: colorAccent,
+              label: Text(
+                item.name+" "+item.count.toString()+" т",
+                style: getMidFontWhite(),
+              ),
+            ),
+          ),
+        ))
+            .toList())
+        : Offstage();
   }
 }
