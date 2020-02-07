@@ -30,7 +30,10 @@ class Order extends Equatable {
     this.createdAt,
     this.driver,
     this.car}
-      );
+      ){
+    goods = [];
+    stamps = [];
+  }
 
   Order.fromJsonMap(Map<dynamic, dynamic> map)
       : id = map["id"],

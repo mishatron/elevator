@@ -32,7 +32,9 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
   CreateOrderBloc _bloc = CreateOrderBloc();
   Widget _myAnimatedWidget;
 
-  Widget _carInfo = CarInfo();
+  Widget _carInfo = CarInfo(
+    key: UniqueKey(),
+  );
   Widget _driverInfo = DriverInfo();
   Widget _orderInfo = OrderInfo();
 
@@ -51,13 +53,12 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
             break;
           case Events.ON_NEXT_TO_DRIVER_INFO:
             {
-              if(_bloc.isCarInfoValidate()){
+              if (_bloc.isCarInfoValidate()) {
                 setState(() {
                   _myAnimatedWidget = _driverInfo;
                 });
-              }
-             else{
-               showMessage("Заповніть всі поля");
+              } else {
+                showMessage("Заповніть всі поля");
               }
             }
             break;
@@ -109,7 +110,7 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
 
   @override
   Widget buildAppbar() {
-    return null;
+    return getAppBar(context, "Додавання вантажу", leading: getBack());
   }
 
   @override
@@ -123,22 +124,17 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
         bloc: _bloc,
         listener: blocListener,
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              getBack(),
-              AnimatedSwitcher(
-                  duration: Duration(milliseconds: 500),
-                  child: _myAnimatedWidget),
-            ],
-          ),
-        ),
+            child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                child: _myAnimatedWidget)),
       ),
     );
   }
 }
 
 class CarInfo extends BaseStatefulWidget {
+  CarInfo({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return CarInfoState();
@@ -152,6 +148,10 @@ class CarInfoState extends BaseState<CarInfo> {
   var _trailerNumberController = TextEditingController();
   List<DropdownMenuItem<Car>> _dropDownMenuItems;
   Car _selectedCar;
+
+  bool get isEditable => !(_selectedCar == null || _selectedCar.id != "");
+
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -194,12 +194,16 @@ class CarInfoState extends BaseState<CarInfo> {
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) return getProgress(background: false);
               _dropDownMenuItems = snapshot.data.documents.map((document) {
-                var cars = Car.fromJsonMap(document.data);
+                var car = Car.fromJsonMap(document.data);
                 return DropdownMenuItem(
-                  value: cars,
-                  child: Text(cars.carNumber),
+                  value: car,
+                  child: Text(car.carNumber),
                 );
               }).toList();
+              _dropDownMenuItems.add(DropdownMenuItem(
+                value: Car("", "", "", ""),
+                child: Text("Інше"),
+              ));
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 2.5),
@@ -236,97 +240,107 @@ class CarInfoState extends BaseState<CarInfo> {
               );
             },
           ),
-          Card(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                side: BorderSide(width: 1, color: colorAccent)),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Номер автомобіля",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: TextField(
-                      onChanged: ((String text) {
-                        _bloc.order.car.carNumber = text;
-                      }),
-                      decoration: InputDecoration(
-                        hintText: "Введіть номер автомобіля",
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
+          Opacity(
+            opacity: isEditable ? 1.0 : 0.5,
+            child: Form(
+              key: formKey,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    side: BorderSide(width: 1, color: colorAccent)),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Номер автомобіля",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: colorAccent),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TextFormField(
+                          readOnly: !isEditable,
+                          onChanged: ((String text) {
+                            _bloc.order.car.carNumber = text;
+                          }),
+                          decoration: InputDecoration(
+                            hintText: "Введіть номер автомобіля",
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                          ),
+                          controller: _carNumberController,
                         ),
                       ),
-                      controller: _carNumberController,
-                    ),
-                  ),
-                  Text(
-                    "Марка автомобіля",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: TextField(
-                      onChanged: ((String text) {
-                        _bloc.order.car.carModel = text;
-                      }),
-                      decoration: InputDecoration(
-                        hintText: "Введіть марку автомобіля",
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
+                      Text(
+                        "Марка автомобіля",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: colorAccent),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TextFormField(
+                          readOnly: !isEditable,
+                          onChanged: ((String text) {
+                            _bloc.order.car.carModel = text;
+                          }),
+                          decoration: InputDecoration(
+                            hintText: "Введіть марку автомобіля",
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                          ),
+                          controller: _carModelController,
                         ),
                       ),
-                      controller: _carModelController,
-                    ),
-                  ),
-                  Text(
-                    "Номер причіпу",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: TextField(
-                      onChanged: ((String text) {
-                        _bloc.order.car.trailerNumber = text;
-                      }),
-                      decoration: InputDecoration(
-                        hintText: "Введіть номер причіпу",
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
+                      Text(
+                        "Номер причіпу",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: colorAccent),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TextFormField(
+                          readOnly: !isEditable,
+                          onChanged: ((String text) {
+                            _bloc.order.car.trailerNumber = text;
+                            print(_bloc.order.car.trailerNumber);
+                          }),
+                          decoration: InputDecoration(
+                            hintText: "Введіть номер причіпу",
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                          ),
+                          controller: _trailerNumberController,
                         ),
                       ),
-                      controller: _trailerNumberController,
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -385,11 +399,15 @@ class DriverInfoState extends BaseState<DriverInfo> {
   List<DropdownMenuItem<Driver>> _dropDownMenuItems;
   Driver _selectedDriver;
 
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
     _bloc = BlocProvider.of(context);
   }
+
+  bool get isEditable => !(_selectedDriver == null || _selectedDriver.id != "");
 
   @override
   Widget getLayout() {
@@ -432,6 +450,10 @@ class DriverInfoState extends BaseState<DriverInfo> {
                   child: Text(drivers.getFullName()),
                 );
               }).toList();
+              _dropDownMenuItems.add(DropdownMenuItem(
+                value: Driver("", "", "", "", "", ""),
+                child: Text("Інше"),
+              ));
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 2.5),
@@ -469,124 +491,134 @@ class DriverInfoState extends BaseState<DriverInfo> {
               );
             },
           ),
-          Card(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                side: BorderSide(width: 1, color: colorAccent)),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Ім'я водія",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: TextField(
-                      onChanged: ((String text) {
-                        _bloc.order.driver.firstName = text;
-                      }),
-                      decoration: InputDecoration(
-                        hintText: "Введіть ім'я водія",
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
+          Opacity(
+            opacity: isEditable ? 1.0 : 0.5,
+            child: Form(
+              key: formKey,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    side: BorderSide(width: 1, color: colorAccent)),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Ім'я водія",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: colorAccent),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TextFormField(
+                          readOnly: !isEditable,
+                          onChanged: ((String text) {
+                            _bloc.order.driver.firstName = text;
+                          }),
+                          decoration: InputDecoration(
+                            hintText: "Введіть ім'я водія",
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                          ),
+                          controller: _driverFirstNameController,
                         ),
                       ),
-                      controller: _driverFirstNameController,
-                    ),
-                  ),
-                  Text(
-                    "Прізвище водія",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: TextField(
-                      onChanged: ((String text) {
-                        _bloc.order.driver.lastName = text;
-                      }),
-                      decoration: InputDecoration(
-                        hintText: "Введіть прізвище водія",
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
+                      Text(
+                        "Прізвище водія",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: colorAccent),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TextFormField(
+                          readOnly: !isEditable,
+                          onChanged: ((String text) {
+                            _bloc.order.driver.lastName = text;
+                          }),
+                          decoration: InputDecoration(
+                            hintText: "Введіть прізвище водія",
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                          ),
+                          controller: _driverLastNameController,
                         ),
                       ),
-                      controller: _driverLastNameController,
-                    ),
-                  ),
-                  Text(
-                    "Номер телефону водія",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: TextField(
-                      onChanged: ((String text) {
-                        _bloc.order.driver.phone = text;
-                      }),
-                      decoration: InputDecoration(
-                        hintText: "Введіть номер телефону водія",
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
+                      Text(
+                        "Номер телефону водія",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: colorAccent),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TextFormField(
+                          readOnly: !isEditable,
+                          onChanged: ((String text) {
+                            _bloc.order.driver.phone = text;
+                          }),
+                          decoration: InputDecoration(
+                            hintText: "Введіть номер телефону водія",
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                          ),
+                          controller: _driverPhoneController,
                         ),
                       ),
-                      controller: _driverPhoneController,
-                    ),
-                  ),
-                  Text(
-                    "Електронна пошта водія",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorAccent),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: TextField(
-                      onChanged: ((String text) {
-                        _bloc.order.driver.email = text;
-                      }),
-                      decoration: InputDecoration(
-                        hintText: "Введіть електронну пошту водія",
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: colorAccent, width: 1),
+                      Text(
+                        "Електронна пошта водія",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: colorAccent),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TextFormField(
+                          readOnly: !isEditable,
+                          onChanged: ((String text) {
+                            _bloc.order.driver.email = text;
+                          }),
+                          decoration: InputDecoration(
+                            hintText: "Введіть електронну пошту водія",
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: colorAccent, width: 1),
+                            ),
+                          ),
+                          controller: _driverEmailController,
                         ),
                       ),
-                      controller: _driverEmailController,
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -692,18 +724,19 @@ class OrderInfoState extends BaseState<OrderInfo> {
                           child: TextField(
                             decoration: InputDecoration(
                               enabledBorder: const OutlineInputBorder(
-                                borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                borderSide: const BorderSide(
+                                    color: colorAccent, width: 1),
                               ),
                               border: const OutlineInputBorder(
-                                borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                borderSide: const BorderSide(
+                                    color: colorAccent, width: 1),
                               ),
                             ),
                           ),
                         ),
-                        IconButton(icon: Icon(Icons.add),
-                            onPressed: (){
+                        IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: () {
                               _bloc.order.stamps.add(stamp);
                             })
                       ],
@@ -738,19 +771,20 @@ class OrderInfoState extends BaseState<OrderInfo> {
                           child: TextField(
                             decoration: InputDecoration(
                               enabledBorder: const OutlineInputBorder(
-                                borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                borderSide: const BorderSide(
+                                    color: colorAccent, width: 1),
                               ),
                               border: const OutlineInputBorder(
-                                borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                borderSide: const BorderSide(
+                                    color: colorAccent, width: 1),
                               ),
                             ),
                           ),
                         ),
-                        IconButton(icon: Icon(Icons.add),
-                            onPressed: (){
-                          _bloc.order.stamps.add(stamp);
+                        IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: () {
+                              _bloc.order.stamps.add(stamp);
                             })
                       ],
                     ),
@@ -892,35 +926,35 @@ class OrderInfoState extends BaseState<OrderInfo> {
   Widget _buildChips({BuildContext context}) {
     return _bloc.order.stamps != null
         ? Wrap(
-        children: _bloc.order.stamps
-            .map((item) => Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 2.5,
-          ),
-          child: Container(
-            child: Chip(
-              deleteIcon: CircleAvatar(
-                radius: 10,
-                child: FittedBox(
-                    child: Icon(Icons.cancel), fit: BoxFit.contain),
-              ),
-              onDeleted: () {
-                setState(() {
-                  _bloc.order.stamps.remove(item);
-                });
-              },
-              backgroundColor: colorAccent,
-              label: SizedBox(
-                width: MediaQuery.of(context).size.width / 4,
-                child: Text(
-                  item.stampNumber,
-                  style: getMidFontWhite(),
-                ),
-              ),
-            ),
-          ),
-        ))
-            .toList())
+            children: _bloc.order.stamps
+                .map((item) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 2.5,
+                      ),
+                      child: Container(
+                        child: Chip(
+                          deleteIcon: CircleAvatar(
+                            radius: 10,
+                            child: FittedBox(
+                                child: Icon(Icons.cancel), fit: BoxFit.contain),
+                          ),
+                          onDeleted: () {
+                            setState(() {
+                              _bloc.order.stamps.remove(item);
+                            });
+                          },
+                          backgroundColor: colorAccent,
+                          label: SizedBox(
+                            width: MediaQuery.of(context).size.width / 4,
+                            child: Text(
+                              item.stampNumber,
+                              style: getMidFontWhite(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ))
+                .toList())
         : Offstage();
   }
 
@@ -928,31 +962,31 @@ class OrderInfoState extends BaseState<OrderInfo> {
     return Column(
         children: order.goods
             .map((o) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                border: Border.all(color: colorAccent, width: 1)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 10, vertical: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    o.name,
-                    style: TextStyle(color: colorAccent),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        border: Border.all(color: colorAccent, width: 1)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            o.name,
+                            style: TextStyle(color: colorAccent),
+                          ),
+                          Text(
+                            o.count.toString() + " т",
+                            style: TextStyle(color: colorAccent),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                  Text(
-                    o.count.toString() + " т",
-                    style: TextStyle(color: colorAccent),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ))
+                ))
             .toList());
   }
 }
