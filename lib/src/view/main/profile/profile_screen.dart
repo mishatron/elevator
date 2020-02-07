@@ -8,7 +8,6 @@ import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/view/custom/BaseButton.dart';
-import 'package:elevator/src/view/custom/test.dart';
 import 'package:elevator/src/view/main/profile/profile_bloc.dart';
 import 'package:elevator/src/view/utils/image_utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:elevator/src/view/custom/linear_percent_indicator.dart';
 
 class ProfileScreen extends BaseStatefulWidget {
   @override
@@ -108,28 +106,6 @@ class _ProfileScreenState extends BaseStatefulScreen<ProfileScreen>
               onClick: _askToLogout,
             ),
           ),
-          Container(
-            color: Colors.grey,
-            padding: const EdgeInsets.all(8.0),
-            child: LinearPercentIndicator(
-              width: MediaQuery.of(context).size.width * 2 / 3,
-              lineHeight: 26.0,
-              currentPoints: 40,
-              pointsMaximum: 90,
-              level: 4,
-              backgroundColor: Colors.white,
-              progressColor: Color(0xffDC0000),
-            ),
-          ),
-          Padding(
-              padding: const EdgeInsets.only(top: 32),
-              child: Test(
-                level: 4,
-                curP: 60,
-                maxP: 90,
-                progressColor: Colors.redAccent,
-                backgroundColor: Colors.green,
-              ))
         ],
       ),
     );
