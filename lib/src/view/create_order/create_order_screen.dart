@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elevator/res/values/colors.dart';
+import 'package:elevator/res/values/styles.dart';
 import 'package:elevator/router/navigation_service.dart';
 import 'package:elevator/src/core/bloc/base_bloc_listener.dart';
 import 'package:elevator/src/core/ui/base_state.dart';
@@ -12,6 +13,7 @@ import 'package:elevator/src/di/dependency_injection.dart';
 import 'package:elevator/src/domain/responses/car.dart';
 import 'package:elevator/src/domain/responses/driver.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
+import 'package:elevator/src/domain/responses/order/stamp.dart';
 import 'package:elevator/src/view/create_order/create_order_bloc.dart';
 import 'package:elevator/src/view/custom/BaseButton.dart';
 import 'package:flutter/cupertino.dart';
@@ -49,9 +51,14 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
             break;
           case Events.ON_NEXT_TO_DRIVER_INFO:
             {
-              setState(() {
-                _myAnimatedWidget = _driverInfo;
-              });
+              if(_bloc.isCarInfoValidate()){
+                setState(() {
+                  _myAnimatedWidget = _driverInfo;
+                });
+              }
+             else{
+               showMessage("Заповніть всі поля");
+              }
             }
             break;
           case Events.ON_BACK_TO_CAR_INFO:
@@ -63,6 +70,14 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
             break;
           case Events.ON_NEXT_TO_ORDER_INFO:
             {
+//              if(_bloc.isDriverInfoValidate()){
+//                setState(() {
+//                  _myAnimatedWidget = _orderInfo;
+//                });
+//              }
+//            else{
+//              showMessage("Заповніть всі поля");
+//              }
               setState(() {
                 _myAnimatedWidget = _orderInfo;
               });
@@ -244,6 +259,7 @@ class CarInfoState extends BaseState<CarInfo> {
                         _bloc.order.car.carNumber = text;
                       }),
                       decoration: InputDecoration(
+                        hintText: "Введіть номер автомобіля",
                         enabledBorder: const OutlineInputBorder(
                           borderSide:
                               const BorderSide(color: colorAccent, width: 1),
@@ -270,6 +286,7 @@ class CarInfoState extends BaseState<CarInfo> {
                         _bloc.order.car.carModel = text;
                       }),
                       decoration: InputDecoration(
+                        hintText: "Введіть марку автомобіля",
                         enabledBorder: const OutlineInputBorder(
                           borderSide:
                               const BorderSide(color: colorAccent, width: 1),
@@ -296,6 +313,7 @@ class CarInfoState extends BaseState<CarInfo> {
                         _bloc.order.car.trailerNumber = text;
                       }),
                       decoration: InputDecoration(
+                        hintText: "Введіть номер причіпу",
                         enabledBorder: const OutlineInputBorder(
                           borderSide:
                               const BorderSide(color: colorAccent, width: 1),
@@ -474,6 +492,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         _bloc.order.driver.firstName = text;
                       }),
                       decoration: InputDecoration(
+                        hintText: "Введіть ім'я водія",
                         enabledBorder: const OutlineInputBorder(
                           borderSide:
                               const BorderSide(color: colorAccent, width: 1),
@@ -500,6 +519,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         _bloc.order.driver.lastName = text;
                       }),
                       decoration: InputDecoration(
+                        hintText: "Введіть прізвище водія",
                         enabledBorder: const OutlineInputBorder(
                           borderSide:
                               const BorderSide(color: colorAccent, width: 1),
@@ -526,6 +546,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         _bloc.order.driver.phone = text;
                       }),
                       decoration: InputDecoration(
+                        hintText: "Введіть номер телефону водія",
                         enabledBorder: const OutlineInputBorder(
                           borderSide:
                               const BorderSide(color: colorAccent, width: 1),
@@ -552,6 +573,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         _bloc.order.driver.email = text;
                       }),
                       decoration: InputDecoration(
+                        hintText: "Введіть електронну пошту водія",
                         enabledBorder: const OutlineInputBorder(
                           borderSide:
                               const BorderSide(color: colorAccent, width: 1),
@@ -619,6 +641,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
   var _orderToController = TextEditingController();
   var _orderFromController = TextEditingController();
   CreateOrderBloc _bloc;
+  Stamp stamp;
 
   @override
   void initState() {
@@ -644,6 +667,98 @@ class OrderInfoState extends BaseState<OrderInfo> {
             maxLines: 2,
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold, color: colorAccent),
+          ),
+          Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                side: BorderSide(width: 1, color: colorAccent)),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Вантаж",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: TextField(
+                            decoration: InputDecoration(
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                              ),
+                            ),
+                          ),
+                        ),
+                        IconButton(icon: Icon(Icons.add),
+                            onPressed: (){
+                              _bloc.order.stamps.add(stamp);
+                            })
+                      ],
+                    ),
+                  ),
+                  _buildGoodsItem(_bloc.order)
+                ],
+              ),
+            ),
+          ),
+          Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                side: BorderSide(width: 1, color: colorAccent)),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Пломби",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorAccent),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: TextField(
+                            decoration: InputDecoration(
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderSide:
+                                const BorderSide(color: colorAccent, width: 1),
+                              ),
+                            ),
+                          ),
+                        ),
+                        IconButton(icon: Icon(Icons.add),
+                            onPressed: (){
+                          _bloc.order.stamps.add(stamp);
+                            })
+                      ],
+                    ),
+                  ),
+                  _buildChips(context: context),
+                ],
+              ),
+            ),
           ),
           Card(
             shape: RoundedRectangleBorder(
@@ -772,5 +887,72 @@ class OrderInfoState extends BaseState<OrderInfo> {
         ],
       ),
     );
+  }
+
+  Widget _buildChips({BuildContext context}) {
+    return _bloc.order.stamps != null
+        ? Wrap(
+        children: _bloc.order.stamps
+            .map((item) => Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 2.5,
+          ),
+          child: Container(
+            child: Chip(
+              deleteIcon: CircleAvatar(
+                radius: 10,
+                child: FittedBox(
+                    child: Icon(Icons.cancel), fit: BoxFit.contain),
+              ),
+              onDeleted: () {
+                setState(() {
+                  _bloc.order.stamps.remove(item);
+                });
+              },
+              backgroundColor: colorAccent,
+              label: SizedBox(
+                width: MediaQuery.of(context).size.width / 4,
+                child: Text(
+                  item.stampNumber,
+                  style: getMidFontWhite(),
+                ),
+              ),
+            ),
+          ),
+        ))
+            .toList())
+        : Offstage();
+  }
+
+  Column _buildGoodsItem(Order order) {
+    return Column(
+        children: order.goods
+            .map((o) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                border: Border.all(color: colorAccent, width: 1)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 10, vertical: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    o.name,
+                    style: TextStyle(color: colorAccent),
+                  ),
+                  Text(
+                    o.count.toString() + " т",
+                    style: TextStyle(color: colorAccent),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ))
+            .toList());
   }
 }

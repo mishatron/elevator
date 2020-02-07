@@ -46,11 +46,22 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
 
 
   bool isCarInfoValidate() {
-
+    order.car.carNumber = order.car.carNumber.trim();
+    order.car.carModel = order.car.carModel.trim();
+    order.car.trailerNumber = order.car.trailerNumber.trim();
+    return (order.car.carNumber.isNotEmpty && order.car.carModel.isNotEmpty && order.car.trailerNumber.isNotEmpty);
   }
 
   bool isDriverInfoValidate() {
-
+    order.driver.firstName = order.driver.firstName.trim();
+    order.driver.lastName = order.driver.lastName.trim();
+    order.driver.phone = order.driver.phone.trim();
+    order.driver.email = order.driver.email.trim();
+    return (order.driver.firstName.isNotEmpty
+        && order.driver.lastName.isNotEmpty
+        && order.driver.phone.isNotEmpty
+        && order.driver.email.isNotEmpty
+    );
   }
 
   bool isOrderInfoValidate() {
