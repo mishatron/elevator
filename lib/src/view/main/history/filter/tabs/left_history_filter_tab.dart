@@ -29,7 +29,7 @@ class _LeftHistoryFilterTabState extends BaseState<LeftHistoryFilterTab> {
     return BlocBuilder<HistoryFilterBloc, DoubleBlocState>(
       builder: (BuildContext context, state) {
         if (_bloc.output == null) return getProgress(background: false);
-        else if(_bloc.input.isEmpty)return PlaceholderWidget();
+        else if(_bloc.output.isEmpty)return PlaceholderWidget();
         return ListView.builder(
           itemCount: _bloc.output.length,
           itemBuilder: (context, index) {
