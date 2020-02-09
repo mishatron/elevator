@@ -102,9 +102,12 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
       firstDate: DateTime(2019),
       lastDate: DateTime.now(),
     );
-    Bundle bundle = Bundle();
-    bundle.putDynamic("date", selectedDate);
-    injector<NavigationService>().pushNamed(filteredHistoryRoute, arguments: bundle);
+    if (selectedDate != null) {
+      Bundle bundle = Bundle();
+      bundle.putDynamic("date", selectedDate);
+      injector<NavigationService>().pushNamed(
+          filteredHistoryRoute, arguments: bundle);
+    }
   }
 
   @override

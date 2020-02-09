@@ -11,6 +11,7 @@ import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/domain/responses/order/stamp.dart';
 import 'package:elevator/src/view/main/home/home_bloc.dart';
 import 'package:elevator/src/view/main/home/list_item.dart';
+import 'package:elevator/src/view/placeholder/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -49,6 +50,7 @@ class _EnteredTabState extends BaseState<EnteredTab> {
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) return getProgress(background: false);
+              else if(snapshot.data.documents.isEmpty)return PlaceholderWidget();
               return ListView.builder(
                 itemCount: snapshot.data.documents.length,
                 controller: widget.hideButtonController,
@@ -65,8 +67,8 @@ class _EnteredTabState extends BaseState<EnteredTab> {
   }
 
   void addModel() {
-    addCar();
-    addDriver();
+//    addCar();
+//    addDriver();
     addOrder();
   }
 

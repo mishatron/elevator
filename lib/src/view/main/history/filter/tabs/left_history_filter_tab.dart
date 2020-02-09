@@ -4,6 +4,7 @@ import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/view/main/history/filter/history_filter_bloc.dart';
 import 'package:elevator/src/view/main/home/list_item.dart';
+import 'package:elevator/src/view/placeholder/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,6 +29,7 @@ class _LeftHistoryFilterTabState extends BaseState<LeftHistoryFilterTab> {
     return BlocBuilder<HistoryFilterBloc, DoubleBlocState>(
       builder: (BuildContext context, state) {
         if (_bloc.output == null) return getProgress(background: false);
+        else if(_bloc.input.isEmpty)return PlaceholderWidget();
         return ListView.builder(
           itemCount: _bloc.output.length,
           itemBuilder: (context, index) {

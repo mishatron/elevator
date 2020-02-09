@@ -5,6 +5,7 @@ import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/view/main/home/home_bloc.dart';
 import 'package:elevator/src/view/main/home/list_item.dart';
+import 'package:elevator/src/view/placeholder/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,6 +35,7 @@ class _LeftTabState extends BaseState<LeftTab> {
       stream: _bloc.getOutputOrders(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) return getProgress(background: false);
+        else if(snapshot.data.documents.isEmpty)return PlaceholderWidget();
         return ListView.builder(
           itemCount: snapshot.data.documents.length,
           controller: widget.hideButtonController,
