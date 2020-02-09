@@ -52,9 +52,17 @@ class ListItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text(
-                    order.car.carModel,
-                    style: TextStyle(color: colorAccent, fontSize: 16),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        order.car.carModel,
+                        maxLines: 1,
+                        softWrap: true,
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(color: colorAccent, fontSize: 16),
+                      ),
+                    ),
                   ),
                 ],
               ),

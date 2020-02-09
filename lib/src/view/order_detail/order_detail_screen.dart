@@ -69,26 +69,27 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                         ),
                       ),
                     ),
-                    Text(
-                      _bloc.order.car.carModel,
-                      style: TextStyle(color: colorAccent, fontSize: 16),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          _bloc.order.car.carModel,
+                          maxLines: 1,
+                          softWrap: true,
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(color: colorAccent, fontSize: 16),
+                        ),
+                      ),
                     ),
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Text(
-                    _bloc.order.goods[0].name +
-                        " " +
-                        _bloc.order.goods[0].count.toString() +
-                        "т",
-                    style: TextStyle(color: colorAccent, fontSize: 14),
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 6)
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Expanded(
+                    Flexible(
                       child: Text(
                         _bloc.order.driver.getFullName(),
                         maxLines: 1,
@@ -100,17 +101,15 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Expanded(
-                      child: Text(
-                        _bloc.order.driver.phone,
-                        maxLines: 1,
-                        softWrap: true,
-                        overflow: TextOverflow.fade,
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          color: colorAccent,
-                          fontSize: 16,
-                        ),
+                    Text(
+                      _bloc.order.driver.phone,
+                      maxLines: 1,
+                      softWrap: true,
+                      overflow: TextOverflow.fade,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        color: colorAccent,
+                        fontSize: 16,
                       ),
                     ),
                   ],
@@ -181,9 +180,14 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  order.stamps[i].stampNumber,
-                  style: TextStyle(color: colorAccent),
+                Flexible(
+                  child: Text(
+                    order.stamps[i].stampNumber,
+                    softWrap: true,
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    style: TextStyle(color: colorAccent),
+                  ),
                 ),
                 CupertinoSwitch(
                   onChanged: _bloc.isHistory
@@ -220,9 +224,14 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(
-                            o.name,
-                            style: TextStyle(color: colorAccent),
+                          Flexible(
+                            child: Text(
+                              o.name,
+                              softWrap: true,
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              style: TextStyle(color: colorAccent),
+                            ),
                           ),
                           Text(
                             o.count.toString() + " т",
@@ -258,6 +267,9 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               child: Text(
                 description,
+                softWrap: true,
+                maxLines: 1,
+                overflow: TextOverflow.fade,
                 style: TextStyle(color: colorAccent, fontSize: 17),
               ),
             ),
