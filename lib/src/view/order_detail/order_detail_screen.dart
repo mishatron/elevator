@@ -42,7 +42,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
               children: <Widget>[
                 _bloc.isHistory
                     ? Text(
-                        "Час зміни статуса: " +
+                        "Дата обробки: " +
                             getHistoryDate(_bloc.order.timeStatus).toString(),
                         style: TextStyle(fontSize: 21),
                       )
@@ -53,35 +53,38 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                           _buildButton("Прийняти", _accept),
                         ],
                       ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    //getUserAvatar(order.driver.photoUrl, 50),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                          border: Border.all(color: colorAccent, width: 1)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: Text(
-                          _bloc.order.car.carNumber,
-                          style: TextStyle(color: colorAccent, fontSize: 14),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      //getUserAvatar(order.driver.photoUrl, 50),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                            border: Border.all(color: colorAccent, width: 1)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: Text(
+                            _bloc.order.car.carNumber,
+                            style: TextStyle(color: colorAccent, fontSize: 14),
+                          ),
                         ),
                       ),
-                    ),
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          _bloc.order.car.carModel,
-                          maxLines: 1,
-                          softWrap: true,
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(color: colorAccent, fontSize: 16),
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            _bloc.order.car.carModel,
+                            maxLines: 1,
+                            softWrap: true,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(color: colorAccent, fontSize: 16),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6)

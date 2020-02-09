@@ -17,7 +17,7 @@ String getFormattedDate(String value) {
 }
 
 String getHistoryDate(int millis) {
-  var formatterOut = DateFormat("dd.MM.yyyy");
+  var formatterOut = DateFormat("dd.MM.yyyy, hh:mm");
   var date = DateTime.fromMillisecondsSinceEpoch(millis);
   return formatterOut.format(date);
 }
