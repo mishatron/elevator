@@ -26,11 +26,11 @@ class HistoryRepositoryImpl extends HistoryRepository {
   Future<List<Order>> getOutputOrdersFiltered(DateTime filter) {
     return Firestore.instance
         .collection('history')
-        .where("type", isEqualTo: 1)
-        .where('timeStatus',
+        .where("order.type", isEqualTo: 1)
+        .where('order.timeStatus',
             isGreaterThan:
                 filter.subtract(const Duration(days: 1)).millisecondsSinceEpoch)
-        .where('timeStatus',
+        .where('order.timeStatus',
             isLessThan:
                 filter.add(const Duration(days: 1)).millisecondsSinceEpoch)
         .getDocuments()
@@ -45,11 +45,11 @@ class HistoryRepositoryImpl extends HistoryRepository {
   Future<List<Order>> getInputOrdersFiltered(DateTime filter) {
     return Firestore.instance
         .collection('history')
-        .where("type", isEqualTo: 0)
-        .where('timeStatus',
+        .where("order.type", isEqualTo: 0)
+        .where('order.timeStatus',
             isGreaterThan:
                 filter.subtract(const Duration(days: 1)).millisecondsSinceEpoch)
-        .where('timeStatus',
+        .where('order.timeStatus',
             isLessThan:
                 filter.add(const Duration(days: 1)).millisecondsSinceEpoch)
         .getDocuments()
