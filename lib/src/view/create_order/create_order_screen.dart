@@ -65,7 +65,7 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
                   _myAnimatedWidget = _driverInfo;
                 });
               } else {
-                showMessage("Заповніть всі поля");
+                showMessage("Заповніть всі поля вірно");
               }
             }
             break;
@@ -83,7 +83,7 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
                   _myAnimatedWidget = _orderInfo;
                 });
               } else {
-                showMessage("Заповніть всі поля");
+                showMessage("Заповніть всі поля вірно");
               }
 //              setState(() {
 //                _myAnimatedWidget = _orderInfo;
@@ -99,10 +99,10 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
             break;
           case Events.CREATE_ORDER:
             {
-              if (_bloc.isOrderInfoValidate()) {
+              if (_bloc.isOrderInfoValidate() && _bloc.isCreateOrderValidate()) {
                 _bloc.createOrder();
               } else {
-                showMessage("Заповніть всі поля");
+                showMessage("Заповніть всі поля вірно");
               }
             }
             break;
@@ -368,6 +368,12 @@ class CarInfoState extends BaseState<CarInfo> {
                         child: TextFormField(
                           focusNode: _trailerNumberFocusNode,
                           key: UniqueKey(),
+                          inputFormatters: [
+                            MaskTextInputFormatter(mask: '== #### ==', filter: {
+                              "=": RegExp(r'[А-Я]'),
+                              "#": RegExp(r'[0-9]')
+                            })
+                          ],
                           readOnly: !isEditable,
                           onChanged: ((String text) {
                             _bloc.order.car.trailerNumber = text;
@@ -650,6 +656,12 @@ class DriverInfoState extends BaseState<DriverInfo> {
                           onChanged: ((String text) {
                             _bloc.order.driver.phone = text;
                           }),
+                          inputFormatters: [
+                            MaskTextInputFormatter(mask: '+ ## (###) ### ## ##', filter: {
+                              "#": RegExp(r'[0-9]')
+                            })
+                          ],
+                          keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             _phoneFocusNode.unfocus();
@@ -688,6 +700,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                           onFieldSubmitted: (_) {
                             _emailFocusNode.unfocus();
                           },
+                          keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             hintText: "Введіть електронну пошту водія",
                             enabledBorder: const OutlineInputBorder(

@@ -31,6 +31,8 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
   ValueNotifier<bool> isEmptyField = ValueNotifier(false);
   StreamController streamController;
   Order order = Order();
+  final isNameValidate = RegExp(r"^[а-яА-ЯіІїЇєЄ'-]+$");
+  final isCityValidate = RegExp(r"^[а-яА-ЯіІїЇєЄ. '-]+$");
 
   OrderRepository _orderRepository;
 
@@ -105,6 +107,8 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
     order.driver.phone = order.driver.phone.trim();
     order.driver.email = order.driver.email.trim();
     return (order.driver.firstName.isNotEmpty &&
+        isNameValidate.hasMatch(order.driver.firstName)
+        && isNameValidate.hasMatch(order.driver.lastName) &&
         order.driver.lastName.isNotEmpty &&
         order.driver.phone.isNotEmpty &&
         order.driver.email.isNotEmpty);
@@ -115,6 +119,9 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
     order.to = order.to?.trim();
     order.owner = order.owner?.trim();
     return (order.owner.isNullOrEmpty().not() &&
+        isCityValidate.hasMatch(order.from) &&
+        isCityValidate.hasMatch(order.to) &&
+        isNameValidate.hasMatch(order.owner) &&
         order.from.isNullOrEmpty().not() &&
         order.to.isNullOrEmpty().not() &&
         order.stamps.isNotEmpty &&
