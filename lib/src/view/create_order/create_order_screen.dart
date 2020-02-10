@@ -438,6 +438,10 @@ class DriverInfoState extends BaseState<DriverInfo> {
   var _driverLastNameController = TextEditingController();
   var _driverEmailController = TextEditingController();
   var _driverPhoneController = TextEditingController();
+  var _firstNameFocusNode = FocusNode();
+  var _lastNameFocusNode = FocusNode();
+  var _phoneFocusNode = FocusNode();
+  var _emailFocusNode = FocusNode();
   List<DropdownMenuItem<Driver>> _dropDownMenuItems;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -446,6 +450,12 @@ class DriverInfoState extends BaseState<DriverInfo> {
   void initState() {
     super.initState();
     _bloc = BlocProvider.of(context);
+    if (_bloc.order.driver != null) {
+      _driverFirstNameController.text = _bloc.order.driver.firstName;
+      _driverLastNameController.text = _bloc.order.driver.lastName;
+      _driverPhoneController.text = _bloc.order.driver.phone;
+      _driverEmailController.text = _bloc.order.driver.email;
+    }
   }
 
   bool get isEditable =>
@@ -557,9 +567,15 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
                           readOnly: !isEditable,
+                          focusNode: _firstNameFocusNode,
                           onChanged: ((String text) {
                             _bloc.order.driver.firstName = text;
                           }),
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) {
+                            _firstNameFocusNode.unfocus();
+                            _lastNameFocusNode.requestFocus();
+                          },
                           decoration: InputDecoration(
                             hintText: "Введіть ім'я водія",
                             enabledBorder: const OutlineInputBorder(
@@ -585,9 +601,15 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
                           readOnly: !isEditable,
+                          focusNode: _lastNameFocusNode,
                           onChanged: ((String text) {
                             _bloc.order.driver.lastName = text;
                           }),
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) {
+                            _lastNameFocusNode.unfocus();
+                            _phoneFocusNode.requestFocus();
+                          },
                           decoration: InputDecoration(
                             hintText: "Введіть прізвище водія",
                             enabledBorder: const OutlineInputBorder(
@@ -612,10 +634,16 @@ class DriverInfoState extends BaseState<DriverInfo> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
+                          focusNode: _phoneFocusNode,
                           readOnly: !isEditable,
                           onChanged: ((String text) {
                             _bloc.order.driver.phone = text;
                           }),
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) {
+                            _phoneFocusNode.unfocus();
+                            _emailFocusNode.requestFocus();
+                          },
                           decoration: InputDecoration(
                             hintText: "Введіть номер телефону водія",
                             enabledBorder: const OutlineInputBorder(
@@ -640,10 +668,15 @@ class DriverInfoState extends BaseState<DriverInfo> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
+                          focusNode: _emailFocusNode,
                           readOnly: !isEditable,
                           onChanged: ((String text) {
                             _bloc.order.driver.email = text;
                           }),
+                          textInputAction: TextInputAction.done,
+                          onFieldSubmitted: (_) {
+                            _emailFocusNode.unfocus();
+                          },
                           decoration: InputDecoration(
                             hintText: "Введіть електронну пошту водія",
                             enabledBorder: const OutlineInputBorder(
@@ -717,6 +750,12 @@ class OrderInfoState extends BaseState<OrderInfo> {
   var _stampController = TextEditingController();
   var _cargoController = TextEditingController();
   var _weightController = TextEditingController();
+  var _cargoFocusNode = FocusNode();
+  var _weightFocusNode = FocusNode();
+  var _stampsFocusNode = FocusNode();
+  var _ownerFocusNode = FocusNode();
+  var _fromFocusNode = FocusNode();
+  var _toFocusNode = FocusNode();
   CreateOrderBloc _bloc;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -724,6 +763,9 @@ class OrderInfoState extends BaseState<OrderInfo> {
   void initState() {
     super.initState();
     _bloc = BlocProvider.of(context);
+      _orderOwnerController.text = _bloc.order.owner;
+      _orderFromController.text = _bloc.order.from;
+      _orderToController.text = _bloc.order.to;
   }
 
   void _addStampHandler() {
@@ -779,6 +821,12 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: TextFormField(
                         controller: _cargoController,
+                        focusNode: _cargoFocusNode,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) {
+                          _cargoFocusNode.unfocus();
+                          _weightFocusNode.requestFocus();
+                        },
                         decoration: InputDecoration(
                           hintText: "Введіть вантаж",
                           enabledBorder: const OutlineInputBorder(
@@ -805,12 +853,17 @@ class OrderInfoState extends BaseState<OrderInfo> {
                         children: <Widget>[
                           Flexible(
                             child: TextFormField(
+                              focusNode: _weightFocusNode,
                               keyboardType: TextInputType.numberWithOptions(
                                   signed: true, decimal: false),
                               controller: _weightController,
                               inputFormatters: [
                                 WhitelistingTextInputFormatter.digitsOnly
                               ],
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) {
+                                _weightFocusNode.unfocus();
+                              },
                               decoration: InputDecoration(
                                 hintText: "Введіть вагу",
                                 enabledBorder: const OutlineInputBorder(
@@ -856,7 +909,12 @@ class OrderInfoState extends BaseState<OrderInfo> {
                         children: <Widget>[
                           Flexible(
                             child: TextFormField(
+                              focusNode: _stampsFocusNode,
                               controller: _stampController,
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) {
+                                _stampsFocusNode.unfocus();
+                              },
                               decoration: InputDecoration(
                                 hintText: "Введіть номер пломби",
                                 enabledBorder: const OutlineInputBorder(
@@ -900,9 +958,15 @@ class OrderInfoState extends BaseState<OrderInfo> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: TextFormField(
+                        focusNode: _ownerFocusNode,
                         onChanged: ((String text) {
                           _bloc.order.owner = text;
                         }),
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) {
+                          _ownerFocusNode.unfocus();
+                          _fromFocusNode.requestFocus();
+                        },
                         decoration: InputDecoration(
                           hintText: "Введіть власника перевізника",
                           enabledBorder: const OutlineInputBorder(
@@ -927,9 +991,15 @@ class OrderInfoState extends BaseState<OrderInfo> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: TextFormField(
+                        focusNode: _fromFocusNode,
                         onChanged: ((String text) {
                           _bloc.order.from = text;
                         }),
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) {
+                          _fromFocusNode.unfocus();
+                          _toFocusNode.requestFocus();
+                        },
                         decoration: InputDecoration(
                           hintText: "Введіть пункт відвантаження",
                           enabledBorder: const OutlineInputBorder(
@@ -954,9 +1024,14 @@ class OrderInfoState extends BaseState<OrderInfo> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: TextFormField(
+                        focusNode: _toFocusNode,
                         onChanged: ((String text) {
                           _bloc.order.to = text;
                         }),
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) {
+                          _toFocusNode.unfocus();
+                        },
                         decoration: InputDecoration(
                           hintText: "Введіть пунки розвантаження",
                           enabledBorder: const OutlineInputBorder(

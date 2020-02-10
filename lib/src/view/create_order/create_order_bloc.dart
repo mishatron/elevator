@@ -47,6 +47,8 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
 
   Stream<QuerySnapshot> getDrivers() => _orderRepository.getDrivers();
 
+  
+
   void createOrder() {
     add(LoadingState());
     try {
