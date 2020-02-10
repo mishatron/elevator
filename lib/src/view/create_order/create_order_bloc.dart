@@ -47,23 +47,21 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
 
   Stream<QuerySnapshot> getDrivers() => _orderRepository.getDrivers();
 
-
   void createOrder() {
     add(LoadingState());
-    try{
+    try {
       _orderRepository.addCar(order.car).then((car) {
         _orderRepository.addDriver(order.driver).then((driver) {
           _orderRepository.addOrder(order);
         });
       });
-    }
-    catch(err) {
+    } catch (err) {
       add(ErrorState(err));
     }
-
   }
 
   bool isCarInfoValidate() {
+    if (order.car == null) return false;
     order.car.carNumber = order.car.carNumber.trim();
     order.car.carModel = order.car.carModel.trim();
     order.car.trailerNumber = order.car.trailerNumber.trim();
@@ -73,6 +71,7 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
   }
 
   bool isDriverInfoValidate() {
+    if (order.driver == null) return false;
     order.driver.firstName = order.driver.firstName.trim();
     order.driver.lastName = order.driver.lastName.trim();
     order.driver.phone = order.driver.phone.trim();

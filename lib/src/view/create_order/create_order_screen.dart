@@ -75,13 +75,12 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
             break;
           case Events.ON_NEXT_TO_ORDER_INFO:
             {
-              if(_bloc.isDriverInfoValidate()){
+              if (_bloc.isDriverInfoValidate()) {
                 setState(() {
                   _myAnimatedWidget = _orderInfo;
                 });
-              }
-            else{
-              showMessage("Заповніть всі поля");
+              } else {
+                showMessage("Заповніть всі поля");
               }
 //              setState(() {
 //                _myAnimatedWidget = _orderInfo;
@@ -97,14 +96,12 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
             break;
           case Events.CREATE_ORDER:
             {
-              if(_bloc.isOrderInfoValidate()){
+              if (_bloc.isOrderInfoValidate()) {
                 _bloc.createOrder();
                 showMessage("zaebis");
-              }
-              else{
+              } else {
                 showMessage("Заповніть всі поля");
               }
-
             }
             break;
         }
@@ -157,10 +154,13 @@ class CarInfoState extends BaseState<CarInfo> {
   var _carNumberController = TextEditingController();
   var _carModelController = TextEditingController();
   var _trailerNumberController = TextEditingController();
-  List<DropdownMenuItem<Car>> _dropDownMenuItems;
-  Car _selectedCar;
 
-  bool get isEditable => !(_selectedCar == null || _selectedCar.id != "");
+  var _carNumberFocusNode = FocusNode();
+  var _carModelFocusNode = FocusNode();
+  var _trailerNumberFocusNode = FocusNode();
+  List<DropdownMenuItem<Car>> _dropDownMenuItems;
+
+  bool get isEditable => !(_bloc.order.car == null || _bloc.order.car.id != "");
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -168,6 +168,12 @@ class CarInfoState extends BaseState<CarInfo> {
   void initState() {
     super.initState();
     _bloc = BlocProvider.of(context);
+
+    if (_bloc.order.car != null) {
+      _carModelController.text = _bloc.order.car.carModel;
+      _carNumberController.text = _bloc.order.car.carNumber;
+      _trailerNumberController.text = _bloc.order.car.trailerNumber;
+    }
   }
 
   @override
@@ -229,7 +235,11 @@ class CarInfoState extends BaseState<CarInfo> {
                           iconEnabledColor: colorAccent,
                           iconDisabledColor: colorAccent,
                           isExpanded: true,
-                          value: _selectedCar,
+                          value: _bloc.order.car == null
+                              ? null
+                              : _bloc.order.car.id == ""
+                                  ? Car("", "", "", "")
+                                  : _bloc.order.car,
                           hint: Text(
                             "Виберіть авто",
                             style: TextStyle(color: colorAccent),
@@ -237,12 +247,13 @@ class CarInfoState extends BaseState<CarInfo> {
                           items: _dropDownMenuItems,
                           onChanged: (val) {
                             setState(() {
-                              _selectedCar = val;
+                              _bloc.order.car = val;
                               _carNumberController.text =
-                                  _selectedCar.carNumber;
-                              _carModelController.text = _selectedCar.carModel;
+                                  _bloc.order.car.carNumber;
+                              _carModelController.text =
+                                  _bloc.order.car.carModel;
                               _trailerNumberController.text =
-                                  _selectedCar.trailerNumber;
+                                  _bloc.order.car.trailerNumber;
                             });
                           }),
                     ),
@@ -275,10 +286,16 @@ class CarInfoState extends BaseState<CarInfo> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
                           key: UniqueKey(),
+                          focusNode: _carNumberFocusNode,
                           readOnly: !isEditable,
                           onChanged: ((String text) {
                             _bloc.order.car.carNumber = text;
                           }),
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) {
+                            _carNumberFocusNode.unfocus();
+                            _carModelFocusNode.requestFocus();
+                          },
                           decoration: InputDecoration(
                             hintText: "Введіть номер автомобіля",
                             enabledBorder: const OutlineInputBorder(
@@ -303,11 +320,17 @@ class CarInfoState extends BaseState<CarInfo> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
+                          focusNode: _carModelFocusNode,
                           key: UniqueKey(),
                           readOnly: !isEditable,
                           onChanged: ((String text) {
                             _bloc.order.car.carModel = text;
                           }),
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) {
+                            _carModelFocusNode.unfocus();
+                            _trailerNumberFocusNode.requestFocus();
+                          },
                           decoration: InputDecoration(
                             hintText: "Введіть марку автомобіля",
                             enabledBorder: const OutlineInputBorder(
@@ -332,12 +355,17 @@ class CarInfoState extends BaseState<CarInfo> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
+                          focusNode: _trailerNumberFocusNode,
                           key: UniqueKey(),
                           readOnly: !isEditable,
                           onChanged: ((String text) {
                             _bloc.order.car.trailerNumber = text;
                             print(_bloc.order.car.trailerNumber);
                           }),
+                          textInputAction: TextInputAction.done,
+                          onFieldSubmitted: (_) {
+                            _trailerNumberFocusNode.unfocus();
+                          },
                           decoration: InputDecoration(
                             hintText: "Введіть номер причіпу",
                             enabledBorder: const OutlineInputBorder(
@@ -411,7 +439,6 @@ class DriverInfoState extends BaseState<DriverInfo> {
   var _driverEmailController = TextEditingController();
   var _driverPhoneController = TextEditingController();
   List<DropdownMenuItem<Driver>> _dropDownMenuItems;
-  Driver _selectedDriver;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -421,7 +448,8 @@ class DriverInfoState extends BaseState<DriverInfo> {
     _bloc = BlocProvider.of(context);
   }
 
-  bool get isEditable => !(_selectedDriver == null || _selectedDriver.id != "");
+  bool get isEditable =>
+      !(_bloc.order.driver == null || _bloc.order.driver.id != "");
 
   @override
   Widget getLayout() {
@@ -480,7 +508,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                       padding: const EdgeInsets.symmetric(horizontal: 5),
                       child: DropdownButton(
                           isExpanded: true,
-                          value: _selectedDriver,
+                          value: _bloc.order.driver,
                           hint: Text(
                             "Виберіть водія",
                             style: TextStyle(color: colorAccent),
@@ -488,15 +516,15 @@ class DriverInfoState extends BaseState<DriverInfo> {
                           items: _dropDownMenuItems,
                           onChanged: (val) {
                             setState(() {
-                              _selectedDriver = val;
+                              _bloc.order.driver = val;
                               _driverFirstNameController.text =
-                                  _selectedDriver.firstName;
+                                  _bloc.order.driver.firstName;
                               _driverLastNameController.text =
-                                  _selectedDriver.lastName;
+                                  _bloc.order.driver.lastName;
                               _driverPhoneController.text =
-                                  _selectedDriver.phone;
+                                  _bloc.order.driver.phone;
                               _driverEmailController.text =
-                                  _selectedDriver.email;
+                                  _bloc.order.driver.email;
                             });
                           }),
                     ),
@@ -1022,32 +1050,32 @@ class OrderInfoState extends BaseState<OrderInfo> {
   Widget _buildGoodsItem(Order order) {
     return _bloc.order.goods != null
         ? Wrap(
-        children: _bloc.order.goods
-            .map((item) => Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 2.5,
-          ),
-          child: Container(
-            child: Chip(
-              deleteIcon: CircleAvatar(
-                radius: 10,
-                child: FittedBox(
-                    child: Icon(Icons.cancel), fit: BoxFit.contain),
-              ),
-              onDeleted: () {
-                setState(() {
-                  _bloc.order.goods.remove(item);
-                });
-              },
-              backgroundColor: colorAccent,
-              label: Text(
-                item.name+" "+item.count.toString()+" т",
-                style: getMidFontWhite(),
-              ),
-            ),
-          ),
-        ))
-            .toList())
+            children: _bloc.order.goods
+                .map((item) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 2.5,
+                      ),
+                      child: Container(
+                        child: Chip(
+                          deleteIcon: CircleAvatar(
+                            radius: 10,
+                            child: FittedBox(
+                                child: Icon(Icons.cancel), fit: BoxFit.contain),
+                          ),
+                          onDeleted: () {
+                            setState(() {
+                              _bloc.order.goods.remove(item);
+                            });
+                          },
+                          backgroundColor: colorAccent,
+                          label: Text(
+                            item.name + " " + item.count.toString() + " т",
+                            style: getMidFontWhite(),
+                          ),
+                        ),
+                      ),
+                    ))
+                .toList())
         : Offstage();
   }
 }
