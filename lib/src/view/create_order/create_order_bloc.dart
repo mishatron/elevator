@@ -61,6 +61,8 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
         await _orderRepository.addCar(tmpCar);
         order.car = tmpCar;
       }
+    } catch (err) {}
+    try {
       if (order.driver.id == "") {
         Driver tmpDriver = Driver(
             Uuid().v1(),
@@ -72,7 +74,9 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
         await _orderRepository.addDriver(tmpDriver);
         order.driver = tmpDriver;
       }
+    } catch (err) {}
 
+    try {
       await _orderRepository.addOrder(order);
 
       add(NoLoadingState());
