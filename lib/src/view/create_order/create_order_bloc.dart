@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elevator/router/navigation_service.dart';
 import 'package:elevator/src/core/bloc/base_bloc.dart';
 import 'package:elevator/src/core/bloc/base_bloc_state.dart';
 import 'package:elevator/src/core/bloc/empty_bloc_state.dart';
@@ -10,8 +11,10 @@ import 'package:elevator/src/core/bloc/no_loading_state.dart';
 import 'package:elevator/src/data/repositories/order/order_repository.dart';
 import 'package:elevator/src/di/dependency_injection.dart';
 import 'package:elevator/src/domain/responses/car.dart';
+import 'package:elevator/src/domain/responses/driver.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 enum Events {
   CANCEL,
@@ -47,16 +50,33 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
 
   Stream<QuerySnapshot> getDrivers() => _orderRepository.getDrivers();
 
-  
-
-  void createOrder() {
+  void createOrder() async {
     add(LoadingState());
     try {
-      _orderRepository.addCar(order.car).then((car) {
-        _orderRepository.addDriver(order.driver).then((driver) {
-          _orderRepository.addOrder(order);
-        });
-      });
+      if (order.car.id == "") {
+        Car tmpCar = Car(Uuid().v1(), order.car.carModel, order.car.carNumber,
+            order.car.trailerNumber);
+        await _orderRepository.addCar(tmpCar);
+        order.car = tmpCar;
+      }
+      if (order.driver.id == "") {
+        Driver tmpDriver = Driver(
+            Uuid().v1(),
+            order.driver.firstName,
+            order.driver.lastName,
+            order.driver.phone,
+            order.driver.email,
+            order.driver.photoUrl);
+        await _orderRepository.addDriver(tmpDriver);
+        order.driver = tmpDriver;
+      }
+
+      await _orderRepository.addOrder(order);
+
+      add(NoLoadingState());
+
+      injector<NavigationService>().goBack();
+
     } catch (err) {
       add(ErrorState(err));
     }

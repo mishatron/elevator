@@ -4,6 +4,7 @@ import 'package:elevator/router/navigation_service.dart';
 import 'package:elevator/router/route_paths.dart';
 import 'package:elevator/src/core/bloc/base_bloc_listener.dart';
 import 'package:elevator/src/core/bloc/base_bloc_state.dart';
+import 'package:elevator/src/core/bundle.dart';
 import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
@@ -27,12 +28,13 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
   HomeBloc _bloc = HomeBloc();
   ScrollController _hideButtonController;
   bool _isFabVisible = true;
-
+  TabController _tabController;
   List<Widget> tabs = [];
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
     _hideButtonController = ScrollController();
     _hideButtonController.addListener(() {
       if (_hideButtonController.position.userScrollDirection ==
@@ -61,6 +63,7 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
   Widget buildAppbar() {
     return getAppBar(context, 'Головна',
         bottom: TabBar(
+          controller: _tabController,
           labelColor: colorAccent,
           indicatorColor: colorAccent,
           labelStyle: getMidFont(),
@@ -78,22 +81,19 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
   @override
   Widget getLayout() {
     return SafeArea(
-      child: DefaultTabController(
-        length: tabs.length,
-        child: Scaffold(
-          key: scaffoldKey,
-          appBar: buildAppbar(),
-          body: buildBody(),
-          floatingActionButton: AnimatedOpacity(
-              opacity: _isFabVisible ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 300),
-              child: FloatingActionButton(
-                backgroundColor: colorAccent,
-                child: Icon(Icons.add),
-                onPressed: addButtonHandler,
-              )),
-          resizeToAvoidBottomInset: true,
-        ),
+      child: Scaffold(
+        key: scaffoldKey,
+        appBar: buildAppbar(),
+        body: buildBody(),
+        floatingActionButton: AnimatedOpacity(
+            opacity: _isFabVisible ? 1.0 : 0.0,
+            duration: Duration(milliseconds: 300),
+            child: FloatingActionButton(
+              backgroundColor: colorAccent,
+              child: Icon(Icons.add),
+              onPressed: addButtonHandler,
+            )),
+        resizeToAvoidBottomInset: true,
       ),
     );
   }
@@ -109,6 +109,7 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
           builder: (context, state) {
             return TabBarView(
               children: tabs,
+              controller: _tabController,
             );
           },
         ),
@@ -123,6 +124,8 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
   }
 
   void addButtonHandler() {
-    injector<NavigationService>().pushNamed(createOrderRoute);
+    int tab = _tabController.index;
+    injector<NavigationService>()
+        .pushNamed(createOrderRoute, arguments: Bundle()..putInt("tab", tab));
   }
 }

@@ -5,6 +5,7 @@ import 'package:elevator/res/values/colors.dart';
 import 'package:elevator/res/values/styles.dart';
 import 'package:elevator/router/navigation_service.dart';
 import 'package:elevator/src/core/bloc/base_bloc_listener.dart';
+import 'package:elevator/src/core/bundle.dart';
 import 'package:elevator/src/core/ui/base_state.dart';
 import 'package:elevator/src/core/ui/base_statefull_screen.dart';
 import 'package:elevator/src/core/ui/base_statefull_widget.dart';
@@ -47,6 +48,7 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
   @override
   void initState() {
     super.initState();
+
     subscription = _bloc.streamController.stream.listen(
       (event) {
         switch (event) {
@@ -98,7 +100,6 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
             {
               if (_bloc.isOrderInfoValidate()) {
                 _bloc.createOrder();
-                showMessage("zaebis");
               } else {
                 showMessage("Заповніть всі поля");
               }
@@ -123,6 +124,9 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
 
   @override
   Widget buildBody() {
+    int type =
+        (ModalRoute.of(context).settings.arguments as Bundle).getInt("tab");
+    _bloc.order.type = type;
     if (_myAnimatedWidget == null) {
       _myAnimatedWidget = _carInfo;
     }
@@ -763,9 +767,9 @@ class OrderInfoState extends BaseState<OrderInfo> {
   void initState() {
     super.initState();
     _bloc = BlocProvider.of(context);
-      _orderOwnerController.text = _bloc.order.owner;
-      _orderFromController.text = _bloc.order.from;
-      _orderToController.text = _bloc.order.to;
+    _orderOwnerController.text = _bloc.order.owner;
+    _orderFromController.text = _bloc.order.from;
+    _orderToController.text = _bloc.order.to;
   }
 
   void _addStampHandler() {

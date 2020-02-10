@@ -22,7 +22,7 @@ class OrderDetailsBloc extends BaseBloc<BaseBlocState, DoubleBlocState>
   List<bool> stamps = [];
 
   Order get order => _order;
-  bool get isHistory => _order.timeStatus!=-1;
+  bool get isHistory => _order.timeStatus!=-1 && _order.timeStatus!=null;
 
   set order(Order value) {
     _order = value;
