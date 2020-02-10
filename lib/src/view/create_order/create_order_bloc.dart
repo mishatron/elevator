@@ -8,6 +8,7 @@ import 'package:elevator/src/core/bloc/empty_bloc_state.dart';
 import 'package:elevator/src/core/bloc/error_state.dart';
 import 'package:elevator/src/core/bloc/loading_state.dart';
 import 'package:elevator/src/core/bloc/no_loading_state.dart';
+import 'package:elevator/src/core/exceptions/offline_exception.dart';
 import 'package:elevator/src/data/repositories/order/order_repository.dart';
 import 'package:elevator/src/di/dependency_injection.dart';
 import 'package:elevator/src/domain/responses/car.dart';
@@ -15,6 +16,7 @@ import 'package:elevator/src/domain/responses/driver.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:elevator/src/view/utils/extensions.dart';
 
 enum Events {
   CANCEL,
@@ -76,9 +78,9 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
       add(NoLoadingState());
 
       injector<NavigationService>().goBack();
-
     } catch (err) {
       add(ErrorState(err));
+      if (err is OfflineException) injector<NavigationService>().goBack();
     }
   }
 
@@ -105,11 +107,12 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
   }
 
   bool isOrderInfoValidate() {
-    order.from = order.from.trim();
-    order.to = order.to.trim();
-    return (order.owner.isNotEmpty &&
-        order.from.isNotEmpty &&
-        order.to.isNotEmpty &&
+    order.from = order.from?.trim();
+    order.to = order.to?.trim();
+    order.owner = order.owner?.trim();
+    return (order.owner.isNullOrEmpty() &&
+        order.from.isNullOrEmpty() &&
+        order.to.isNullOrEmpty() &&
         order.stamps.isNotEmpty &&
         order.goods.isNotEmpty);
   }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:elevator/res/values/strings.dart';
 import 'package:elevator/src/core/api/exception_manager.dart';
 import 'package:elevator/src/core/base_presenter.dart';
+import 'package:elevator/src/core/exceptions/offline_exception.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -119,6 +120,8 @@ abstract class BaseState<B extends BaseStatefulWidget> extends State<B>
     } else if (e is UnprocessableEntityException) {
       showMessage(e.msg);
     } else if (e is SocketException) {
+      showMessage(Localization.of(context).getValue(noInternetError));
+    }else if (e is OfflineException) {
       showMessage(Localization.of(context).getValue(noInternetError));
     }
     /*else if (e is WrongFileException) {

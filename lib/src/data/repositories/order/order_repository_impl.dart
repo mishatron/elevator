@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elevator/src/core/exceptions/offline_exception.dart';
 import 'package:elevator/src/data/repositories/order/order_repository.dart';
 import 'package:elevator/src/domain/responses/car.dart';
 import 'package:elevator/src/domain/responses/driver.dart';
@@ -13,7 +14,10 @@ class OrderRepositoryImpl extends OrderRepository {
     return Firestore.instance
         .collection('cars')
         .document(model.id)
-        .setData(model.toJson());
+        .setData(model.toJson())
+        .timeout(timeout, onTimeout: () {
+      throw OfflineException();
+    });
   }
 
   @override
@@ -21,12 +25,9 @@ class OrderRepositoryImpl extends OrderRepository {
     return Firestore.instance.collection('cars').snapshots();
   }
 
-
   @override
   Stream<QuerySnapshot> getDrivers() {
-    return Firestore.instance
-        .collection('drivers')
-        .snapshots();
+    return Firestore.instance.collection('drivers').snapshots();
   }
 
   @override
@@ -34,7 +35,10 @@ class OrderRepositoryImpl extends OrderRepository {
     return Firestore.instance
         .collection('drivers')
         .document(model.id)
-        .setData(model.toJson());
+        .setData(model.toJson())
+        .timeout(timeout, onTimeout: () {
+      throw OfflineException();
+    });
   }
 
   @override
@@ -42,7 +46,10 @@ class OrderRepositoryImpl extends OrderRepository {
     return Firestore.instance
         .collection('orders')
         .document(model.id)
-        .setData(model.toJson());
+        .setData(model.toJson())
+        .timeout(timeout, onTimeout: () {
+      throw OfflineException();
+    });
   }
 
   @override

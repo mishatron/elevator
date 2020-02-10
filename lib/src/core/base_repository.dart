@@ -1,2 +1,4 @@
 /// every repository should be inherited from this
-class BaseRepository {}
+class BaseRepository {
+  Duration timeout = const Duration(seconds: 5);
+}
