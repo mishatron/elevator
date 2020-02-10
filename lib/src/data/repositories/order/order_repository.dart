@@ -19,5 +19,6 @@ abstract class OrderRepository extends BaseRepository {
 
   Stream<QuerySnapshot> getDrivers();
 
+  Future<void> deleteOrder(Order order);
   Future<void> moveToHistory(Order order);
 }

@@ -34,6 +34,13 @@ class OrderDetailsBloc extends BaseBloc<BaseBlocState, DoubleBlocState>
     });
   }
 
+  Future<void> moveToHistory() async {
+    try {
+      await _orderRepository.deleteOrder(order);
+    } catch (err) {}
+    await _orderRepository.moveToHistory(order);
+  }
+
   void accept() async {
     if (canAcceptOrder(stamps)) {
       add(LoadingState());
@@ -43,7 +50,7 @@ class OrderDetailsBloc extends BaseBloc<BaseBlocState, DoubleBlocState>
         for (int i = 0; i < stamps.length; ++i) {
           order.stamps[i].stampStatus = stamps[i];
         }
-        await _orderRepository.moveToHistory(order);
+        await moveToHistory();
         add(NoLoadingState());
         add(MessageState(text: "Операція успішно виконана"));
         injector<NavigationService>().goBack();
@@ -64,7 +71,7 @@ class OrderDetailsBloc extends BaseBloc<BaseBlocState, DoubleBlocState>
       for (int i = 0; i < stamps.length; ++i) {
         order.stamps[i].stampStatus = stamps[i];
       }
-      await _orderRepository.moveToHistory(order);
+      await moveToHistory();
       add(NoLoadingState());
       add(MessageState(text: "Операція успішно виконана"));
       injector<NavigationService>().goBack();
