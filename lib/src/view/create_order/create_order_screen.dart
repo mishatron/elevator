@@ -23,6 +23,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateOrderScreen extends BaseStatefulWidget {
@@ -300,6 +301,12 @@ class CarInfoState extends BaseState<CarInfo> {
                             _carNumberFocusNode.unfocus();
                             _carModelFocusNode.requestFocus();
                           },
+                          inputFormatters: [
+                            MaskTextInputFormatter(mask: '== #### ==', filter: {
+                              "=": RegExp(r'[А-Я]'),
+                              "#": RegExp(r'[0-9]')
+                            })
+                          ],
                           decoration: InputDecoration(
                             hintText: "Введіть номер автомобіля",
                             enabledBorder: const OutlineInputBorder(
