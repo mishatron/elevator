@@ -75,17 +75,17 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
             break;
           case Events.ON_NEXT_TO_ORDER_INFO:
             {
-//              if(_bloc.isDriverInfoValidate()){
-//                setState(() {
-//                  _myAnimatedWidget = _orderInfo;
-//                });
-//              }
-//            else{
-//              showMessage("Заповніть всі поля");
-//              }
-              setState(() {
-                _myAnimatedWidget = _orderInfo;
-              });
+              if(_bloc.isDriverInfoValidate()){
+                setState(() {
+                  _myAnimatedWidget = _orderInfo;
+                });
+              }
+            else{
+              showMessage("Заповніть всі поля");
+              }
+//              setState(() {
+//                _myAnimatedWidget = _orderInfo;
+//              });
             }
             break;
           case Events.ON_BACK_TO_DRIVER_INFO:
@@ -97,7 +97,14 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
             break;
           case Events.CREATE_ORDER:
             {
-              showMessage("zaebis");
+              if(_bloc.isOrderInfoValidate()){
+                _bloc.createOrder();
+                showMessage("zaebis");
+              }
+              else{
+                showMessage("Заповніть всі поля");
+              }
+
             }
             break;
         }
@@ -267,6 +274,7 @@ class CarInfoState extends BaseState<CarInfo> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
+                          key: UniqueKey(),
                           readOnly: !isEditable,
                           onChanged: ((String text) {
                             _bloc.order.car.carNumber = text;
@@ -295,6 +303,7 @@ class CarInfoState extends BaseState<CarInfo> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
+                          key: UniqueKey(),
                           readOnly: !isEditable,
                           onChanged: ((String text) {
                             _bloc.order.car.carModel = text;
@@ -323,6 +332,7 @@ class CarInfoState extends BaseState<CarInfo> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
+                          key: UniqueKey(),
                           readOnly: !isEditable,
                           onChanged: ((String text) {
                             _bloc.order.car.trailerNumber = text;
@@ -370,7 +380,7 @@ class CarInfoState extends BaseState<CarInfo> {
                   flex: 3,
                   child: BaseButton(
                     onClick: () {
-                      _bloc.streamController.add(Events.ON_BACK_TO_DRIVER_INFO);
+                      _bloc.streamController.add(Events.ON_NEXT_TO_DRIVER_INFO);
                     },
                     text: "Далі",
                     buttonColor: colorAccent,
@@ -742,6 +752,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       child: TextFormField(
                         controller: _cargoController,
                         decoration: InputDecoration(
+                          hintText: "Введіть вантаж",
                           enabledBorder: const OutlineInputBorder(
                             borderSide:
                                 const BorderSide(color: colorAccent, width: 1),
@@ -773,6 +784,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                                 WhitelistingTextInputFormatter.digitsOnly
                               ],
                               decoration: InputDecoration(
+                                hintText: "Введіть вагу",
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: const BorderSide(
                                       color: colorAccent, width: 1),
@@ -818,6 +830,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                             child: TextFormField(
                               controller: _stampController,
                               decoration: InputDecoration(
+                                hintText: "Введіть номер пломби",
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: const BorderSide(
                                       color: colorAccent, width: 1),
@@ -863,6 +876,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                           _bloc.order.owner = text;
                         }),
                         decoration: InputDecoration(
+                          hintText: "Введіть власника перевізника",
                           enabledBorder: const OutlineInputBorder(
                             borderSide:
                                 const BorderSide(color: colorAccent, width: 1),
@@ -889,6 +903,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                           _bloc.order.from = text;
                         }),
                         decoration: InputDecoration(
+                          hintText: "Введіть пункт відвантаження",
                           enabledBorder: const OutlineInputBorder(
                             borderSide:
                                 const BorderSide(color: colorAccent, width: 1),
@@ -915,6 +930,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                           _bloc.order.to = text;
                         }),
                         decoration: InputDecoration(
+                          hintText: "Введіть пунки розвантаження",
                           enabledBorder: const OutlineInputBorder(
                             borderSide:
                                 const BorderSide(color: colorAccent, width: 1),
