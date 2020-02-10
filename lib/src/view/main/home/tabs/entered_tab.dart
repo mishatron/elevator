@@ -49,14 +49,17 @@ class _EnteredTabState extends BaseState<EnteredTab> {
             stream: _bloc.getInputOrders(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) return getProgress(background: false);
-              else if(snapshot.data.documents.isEmpty)return PlaceholderWidget();
+              if (!snapshot.hasData)
+                return getProgress(background: false);
+              else if (snapshot.data.documents.isEmpty)
+                return PlaceholderWidget();
               return ListView.builder(
                 itemCount: snapshot.data.documents.length,
                 controller: widget.hideButtonController,
                 itemBuilder: (context, index) {
                   return ListItem(
-                      Order.fromJsonMap(snapshot.data.documents[index].data));
+                      Order.fromJsonMap(snapshot.data.documents[index].data)
+                        ..id = snapshot.data.documents[index].documentID);
                 },
               );
             },
@@ -113,9 +116,9 @@ class _EnteredTabState extends BaseState<EnteredTab> {
     Order order = Order(
         id: Uuid().v1(),
         car: car,
-        createdAt:   DateTime.now().millisecondsSinceEpoch,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
         driver: driver,
-        from:  "Вінниця",
+        from: "Вінниця",
         owner: "Петренко Василь Іванович",
         goods: goods,
         stamps: stamps,
@@ -126,9 +129,9 @@ class _EnteredTabState extends BaseState<EnteredTab> {
     Order order2 = Order(
         id: Uuid().v1(),
         car: car2,
-        createdAt:   DateTime.now().millisecondsSinceEpoch,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
         driver: driver2,
-        from:  "Вінниця",
+        from: "Вінниця",
         owner: "Петренко Василь Іванович",
         goods: goods,
         stamps: stamps,
@@ -139,31 +142,29 @@ class _EnteredTabState extends BaseState<EnteredTab> {
     Order order3 = Order(
         id: Uuid().v1(),
         car: car2,
-        createdAt:   DateTime.now().millisecondsSinceEpoch,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
         driver: driver,
-        from:  "Вінниця",
+        from: "Вінниця",
         owner: "Петренко Василь Іванович",
         goods: goods,
         stamps: stamps,
         status: 0,
         type: 1,
         timeStatus: -1,
-        to: "Київ"
-       );
+        to: "Київ");
     Order order4 = Order(
-      id: Uuid().v1(),
+        id: Uuid().v1(),
         car: car,
-        createdAt:   DateTime.now().millisecondsSinceEpoch,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
         driver: driver2,
-        from:  "Вінниця",
+        from: "Вінниця",
         owner: "Петренко Василь Іванович",
         goods: goods,
         stamps: stamps,
         status: 0,
         type: 1,
         timeStatus: -1,
-        to: "Київ"
-       );
+        to: "Київ");
     OrderRepository orderRepository = injector.get();
     orderRepository.addOrder(order);
     orderRepository.addOrder(order2);

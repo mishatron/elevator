@@ -44,7 +44,8 @@ class _EnteredHistoryTabState extends BaseState<EnteredHistoryTab> {
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) {
             return ListItem(
-                History.fromJsonMap(snapshot.data.documents[index].data).order);
+                History.fromJsonMap(snapshot.data.documents[index].data).order
+                  ..id = snapshot.data.documents[index].documentID);
           },
         );
       },

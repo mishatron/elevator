@@ -110,9 +110,9 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
     order.from = order.from?.trim();
     order.to = order.to?.trim();
     order.owner = order.owner?.trim();
-    return (order.owner.isNullOrEmpty() &&
-        order.from.isNullOrEmpty() &&
-        order.to.isNullOrEmpty() &&
+    return (order.owner.isNullOrEmpty().not() &&
+        order.from.isNullOrEmpty().not() &&
+        order.to.isNullOrEmpty().not() &&
         order.stamps.isNotEmpty &&
         order.goods.isNotEmpty);
   }

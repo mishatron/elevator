@@ -70,12 +70,21 @@ class OrderRepositoryImpl extends OrderRepository {
 
   @override
   Future<void> moveToHistory(Order order) async {
-    await Firestore.instance.collection('orders').document(order.id).delete();
+    await Firestore.instance
+        .collection('orders')
+        .document(order.id)
+        .delete()
+        .timeout(timeout, onTimeout: () {
+      throw OfflineException();
+    });
     String guardId = (await FirebaseAuth.instance.currentUser()).uid;
     History history = History(Uuid().v1(), order, guardId);
     await Firestore.instance
         .collection('history')
         .document(history.id)
-        .setData(history.toJson());
+        .setData(history.toJson())
+        .timeout(timeout, onTimeout: () {
+      throw OfflineException();
+    });
   }
 }

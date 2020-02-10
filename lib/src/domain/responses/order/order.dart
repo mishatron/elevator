@@ -3,6 +3,7 @@ import 'package:elevator/src/domain/responses/driver.dart';
 import 'package:elevator/src/domain/responses/order/good.dart';
 import 'package:elevator/src/domain/responses/order/stamp.dart';
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 class Order extends Equatable {
   String id;
@@ -32,6 +33,7 @@ class Order extends Equatable {
       this.driver,
       this.car}) {
 //    car = Car("", "", "", "");
+    id = Uuid().v1();
     goods = [];
     stamps = [];
   }

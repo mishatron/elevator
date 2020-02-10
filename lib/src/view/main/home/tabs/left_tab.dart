@@ -41,7 +41,8 @@ class _LeftTabState extends BaseState<LeftTab> {
           controller: widget.hideButtonController,
           itemBuilder: (context, index) {
             return ListItem(
-                Order.fromJsonMap(snapshot.data.documents[index].data));
+                Order.fromJsonMap(snapshot.data.documents[index].data)
+                  ..id = snapshot.data.documents[index].documentID);
           },
         );
       },

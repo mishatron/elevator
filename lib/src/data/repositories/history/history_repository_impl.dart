@@ -36,7 +36,7 @@ class HistoryRepositoryImpl extends HistoryRepository {
         .getDocuments()
         .then((snapshot) {
       return snapshot.documents.map((doc) {
-        return History.fromJsonMap(doc.data).order;
+        return History.fromJsonMap(doc.data).order..id = doc.documentID;
       }).toList();
     });
   }
@@ -55,7 +55,7 @@ class HistoryRepositoryImpl extends HistoryRepository {
         .getDocuments()
         .then((snapshot) {
       return snapshot.documents.map((doc) {
-        return History.fromJsonMap(doc.data).order;
+        return History.fromJsonMap(doc.data).order..id = doc.documentID;
       }).toList();
     });
   }
