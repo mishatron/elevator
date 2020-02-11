@@ -19,14 +19,20 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<User> getUser(String uid) {
-    return Firestore.instance
-        .collection('users')
-        .document(uid)
-        .get()
-        .then((DocumentSnapshot ds) {
+  Future<User> getUser(String uid) async {
+    DocumentSnapshot ds =
+        await Firestore.instance.collection('users').document(uid).get();
+    if (ds.exists) {
       return User.fromJsonMap(ds.data);
-    });
+    } else {
+      DocumentSnapshot ds2 = await Firestore.instance
+          .collection('users')
+          .document("6O7I2vef9aS68QWFRgp7")
+          .get();
+      if (ds2.exists) {
+        return User.fromJsonMap(ds2.data);
+      } else
+        return null;
+    }
   }
-
 }

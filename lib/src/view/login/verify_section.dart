@@ -42,11 +42,12 @@ class _PhoneSignInSectionState extends BaseState<VerifySection> {
             padding: const EdgeInsets.all(16.0),
             child: TextFormField(
                 controller: _smsController,
-                decoration:
-                    getTextFieldDecoration(context, "Введіть код підтвердження")),
+                decoration: getTextFieldDecoration(
+                    context, "Введіть код підтвердження")),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
             child: BaseButton(
               onClick: _signInWithPhoneNumber,
               text: "Підтвердити",
@@ -80,8 +81,14 @@ class _PhoneSignInSectionState extends BaseState<VerifySection> {
         showMessage("Введіть код");
       }
     } catch (err) {
-      print(err);
-      showMessage("Помилка входу. Перевірте код та номер телефону");
+      final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      if(user==null) {
+        print(err);
+        showMessage("Помилка входу. Перевірте код та номер телефону");
+      }
+      else{
+        injector<NavigationService>().pushNamedReplacement(mainRoute);
+      }
     }
     _bloc.add(NoLoadingState());
   }
