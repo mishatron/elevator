@@ -1,5 +1,5 @@
 
-const String AppTitle = 'Elevator';
+const String AppTitle = 'KERNEL';
 const String ok = "ok";
 const String cancel = "cancel";
 const String back = "back";

@@ -50,7 +50,7 @@ class _SplashScreenState extends BaseStatefulScreen<SplashScreen>
           }
         },
         child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 100),
+            padding: EdgeInsets.symmetric(horizontal: 32),
             child: Center(
                 child: ScaleTransition(
                     scale: animation,
