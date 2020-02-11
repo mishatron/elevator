@@ -197,8 +197,7 @@ class CarInfoState extends BaseState<CarInfo> {
               "Інформація про автомобіль",
               style: TextStyle(
                   fontSize: isMobile() ? 20 : 26,
-                  fontWeight: FontWeight.bold,
-                  color: colorBorder),
+                  fontWeight: FontWeight.bold,),
             ),
           ),
           Padding(
@@ -208,8 +207,7 @@ class CarInfoState extends BaseState<CarInfo> {
               maxLines: 2,
               style: TextStyle(
                   fontSize: isMobile() ? 16 : 20,
-                  fontWeight: FontWeight.bold,
-                  color: colorBorder),
+                  fontWeight: FontWeight.bold,),
             ),
           ),
           StreamBuilder(
@@ -275,6 +273,7 @@ class CarInfoState extends BaseState<CarInfo> {
             child: Form(
               key: formKey,
               child: Card(
+                color: colorPrimaryDark,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     side: BorderSide(width: 1, color: colorBorder)),
@@ -287,8 +286,7 @@ class CarInfoState extends BaseState<CarInfo> {
                         "Номер автомобіля",
                         style: TextStyle(
                             fontSize: textSize,
-                            fontWeight: FontWeight.bold,
-                            color: colorBorder),
+                            fontWeight: FontWeight.bold,),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -328,8 +326,7 @@ class CarInfoState extends BaseState<CarInfo> {
                         "Марка автомобіля",
                         style: TextStyle(
                             fontSize: textSize,
-                            fontWeight: FontWeight.bold,
-                            color: colorBorder),
+                            fontWeight: FontWeight.bold,),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -363,8 +360,7 @@ class CarInfoState extends BaseState<CarInfo> {
                         "Номер причіпу",
                         style: TextStyle(
                             fontSize: textSize,
-                            fontWeight: FontWeight.bold,
-                            color: colorBorder),
+                            fontWeight: FontWeight.bold,),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -494,8 +490,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
               "Інформація про водія",
               style: TextStyle(
                   fontSize: isMobile() ? 20 : 24,
-                  fontWeight: FontWeight.bold,
-                  color: colorBorder),
+                  fontWeight: FontWeight.bold,),
             ),
           ),
           Padding(
@@ -505,8 +500,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
               maxLines: 2,
               style: TextStyle(
                   fontSize: textSize,
-                  fontWeight: FontWeight.bold,
-                  color: colorBorder),
+                  fontWeight: FontWeight.bold,),
             ),
           ),
           StreamBuilder(
@@ -567,6 +561,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
             child: Form(
               key: formKey,
               child: Card(
+                color: colorPrimaryDark,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     side: BorderSide(width: 1, color: colorBorder)),
@@ -579,8 +574,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         "Ім'я водія",
                         style: TextStyle(
                             fontSize: textSize,
-                            fontWeight: FontWeight.bold,
-                            color: colorBorder),
+                            fontWeight: FontWeight.bold,),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -613,8 +607,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         "Прізвище водія",
                         style: TextStyle(
                             fontSize: textSize,
-                            fontWeight: FontWeight.bold,
-                            color: colorBorder),
+                            fontWeight: FontWeight.bold,),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -647,8 +640,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         "Номер телефону водія",
                         style: TextStyle(
                             fontSize: textSize,
-                            fontWeight: FontWeight.bold,
-                            color: colorBorder),
+                            fontWeight: FontWeight.bold,),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -687,8 +679,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         "Електронна пошта водія",
                         style: TextStyle(
                             fontSize: textSize,
-                            fontWeight: FontWeight.bold,
-                            color: colorBorder),
+                            fontWeight: FontWeight.bold,),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -823,10 +814,10 @@ class OrderInfoState extends BaseState<OrderInfo> {
               "Інформація про замовлення",
               style: TextStyle(
                   fontSize: isMobile() ? 20 : 24,
-                  fontWeight: FontWeight.bold,
-                  color: colorBorder),
+                  fontWeight: FontWeight.bold,),
             ),
             Card(
+              color: colorPrimaryDark,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                   side: BorderSide(width: 1, color: colorBorder)),
@@ -839,8 +830,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       "Вантаж",
                       style: TextStyle(
                           fontSize: textSize,
-                          fontWeight: FontWeight.bold,
-                          color: colorBorder),
+                          fontWeight: FontWeight.bold,),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -869,8 +859,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       "Вага",
                       style: TextStyle(
                           fontSize: textSize,
-                          fontWeight: FontWeight.bold,
-                          color: colorBorder),
+                          fontWeight: FontWeight.bold,),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -913,6 +902,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
               ),
             ),
             Card(
+              color: colorPrimaryDark,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                   side: BorderSide(width: 1, color: colorBorder)),
@@ -925,8 +915,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       "Пломби",
                       style: TextStyle(
                           fontSize: textSize,
-                          fontWeight: FontWeight.bold,
-                          color: colorBorder),
+                          fontWeight: FontWeight.bold,),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -965,6 +954,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
               ),
             ),
             Card(
+              color: colorPrimaryDark,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                   side: BorderSide(width: 1, color: colorBorder)),
@@ -977,8 +967,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       "Власник перевізника",
                       style: TextStyle(
                           fontSize: textSize,
-                          fontWeight: FontWeight.bold,
-                          color: colorBorder),
+                          fontWeight: FontWeight.bold,),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -1010,8 +999,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       "Пункт відвантаження",
                       style: TextStyle(
                           fontSize: textSize,
-                          fontWeight: FontWeight.bold,
-                          color: colorBorder),
+                          fontWeight: FontWeight.bold,),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -1043,8 +1031,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       "Пункт розвантаження",
                       style: TextStyle(
                           fontSize: textSize,
-                          fontWeight: FontWeight.bold,
-                          color: colorBorder),
+                          fontWeight: FontWeight.bold,),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -1133,7 +1120,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                               _bloc.order.stamps.remove(item);
                             });
                           },
-                          backgroundColor: colorBorder,
+                          backgroundColor: colorAccent,
                           label: Text(
                             item.stampNumber,
                             style: getMidFontWhite(),
@@ -1165,7 +1152,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                               _bloc.order.goods.remove(item);
                             });
                           },
-                          backgroundColor: colorBorder,
+                          backgroundColor: colorAccent,
                           label: Text(
                             item.name + " " + item.count.toString() + " т",
                             style: getMidFontWhite(),

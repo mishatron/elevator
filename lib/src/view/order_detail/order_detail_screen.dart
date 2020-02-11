@@ -68,7 +68,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                            border: Border.all( width: 1)),
+                            border: Border.all(color: colorBorder, width: 1)),
                         child: Padding(
                           padding: const EdgeInsets.all(6.0),
                           child: Text(
@@ -135,7 +135,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                         decoration: BoxDecoration(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(5.0)),
-                            border: Border.all( width: 1)),
+                            border: Border.all(color: colorBorder, width: 1)),
                         child: Padding(
                           padding: const EdgeInsets.all(6.0),
                           child: Text(
@@ -222,7 +222,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                        border: Border.all( width: 1)),
+                        border: Border.all(color: colorBorder, width: 1)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 15),
@@ -265,7 +265,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
             width: double.infinity,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                border: Border.all( width: 1)),
+                border: Border.all(color: colorBorder, width: 1)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               child: Text(
