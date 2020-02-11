@@ -652,7 +652,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                           }),
                           inputFormatters: [
                             MaskTextInputFormatter(
-                                mask: '+ ## (###) ### ## ##',
+                                mask: '+ 38 (###) ### ## ##',
                                 filter: {"#": RegExp(r'[0-9]')})
                           ],
                           keyboardType: TextInputType.number,
