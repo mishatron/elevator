@@ -122,7 +122,7 @@ abstract class BaseState<B extends BaseStatefulWidget> extends State<B>
     } else if (e is SocketException) {
       showMessage(Localization.of(context).getValue(noInternetError));
     }else if (e is OfflineException) {
-      showMessage(Localization.of(context).getValue(noInternetError));
+      showMessage("Дані збережені та будуть синхронізовані з серевером при підключенні до мережі Інтернет");
     }
     /*else if (e is WrongFileException) {
       showMessage(Localization.of(context).getValue(e.msgRes));
