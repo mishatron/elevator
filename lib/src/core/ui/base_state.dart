@@ -21,6 +21,7 @@ abstract class BaseState<B extends BaseStatefulWidget> extends State<B>
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   final Logger log = Logger();
+  bool isMobile() => (MediaQuery.of(context).size.shortestSide < 600.0);
 
   /// show progress bar
   void showProgress() {

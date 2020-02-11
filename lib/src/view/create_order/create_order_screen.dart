@@ -99,7 +99,8 @@ class _CreateOrderScreenState extends BaseStatefulScreen<CreateOrderScreen>
             break;
           case Events.CREATE_ORDER:
             {
-              if (_bloc.isOrderInfoValidate() && _bloc.isCreateOrderValidate()) {
+              if (_bloc.isOrderInfoValidate() &&
+                  _bloc.isCreateOrderValidate()) {
                 _bloc.createOrder();
               } else {
                 showMessage("Заповніть всі поля вірно");
@@ -183,6 +184,7 @@ class CarInfoState extends BaseState<CarInfo> {
 
   @override
   Widget getLayout() {
+    double textSize = isMobile() ? 16 : 20;
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -194,7 +196,7 @@ class CarInfoState extends BaseState<CarInfo> {
             child: Text(
               "Інформація про автомобіль",
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: isMobile() ? 20 : 26,
                   fontWeight: FontWeight.bold,
                   color: colorAccent),
             ),
@@ -205,7 +207,7 @@ class CarInfoState extends BaseState<CarInfo> {
               "Виберіть автомобіль із списку або заповніть дані",
               maxLines: 2,
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: isMobile() ? 16 : 20,
                   fontWeight: FontWeight.bold,
                   color: colorAccent),
             ),
@@ -247,7 +249,9 @@ class CarInfoState extends BaseState<CarInfo> {
                                   : _bloc.order.car,
                           hint: Text(
                             "Виберіть авто",
-                            style: TextStyle(color: colorAccent),
+                            style: TextStyle(
+                                color: colorAccent,
+                                fontSize: textSize),
                           ),
                           items: _dropDownMenuItems,
                           onChanged: (val) {
@@ -283,7 +287,7 @@ class CarInfoState extends BaseState<CarInfo> {
                       Text(
                         "Номер автомобіля",
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: textSize,
                             fontWeight: FontWeight.bold,
                             color: colorAccent),
                       ),
@@ -324,7 +328,7 @@ class CarInfoState extends BaseState<CarInfo> {
                       Text(
                         "Марка автомобіля",
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: textSize,
                             fontWeight: FontWeight.bold,
                             color: colorAccent),
                       ),
@@ -359,7 +363,7 @@ class CarInfoState extends BaseState<CarInfo> {
                       Text(
                         "Номер причіпу",
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: textSize,
                             fontWeight: FontWeight.bold,
                             color: colorAccent),
                       ),
@@ -480,6 +484,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
 
   @override
   Widget getLayout() {
+    double textSize = isMobile() ? 16 : 20;
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -491,7 +496,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
             child: Text(
               "Інформація про водія",
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: isMobile() ? 20 : 24,
                   fontWeight: FontWeight.bold,
                   color: colorAccent),
             ),
@@ -502,7 +507,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
               "Виберіть водія із списку або заповніть дані",
               maxLines: 2,
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: textSize,
                   fontWeight: FontWeight.bold,
                   color: colorAccent),
             ),
@@ -576,7 +581,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                       Text(
                         "Ім'я водія",
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: textSize,
                             fontWeight: FontWeight.bold,
                             color: colorAccent),
                       ),
@@ -610,7 +615,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                       Text(
                         "Прізвище водія",
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: textSize,
                             fontWeight: FontWeight.bold,
                             color: colorAccent),
                       ),
@@ -644,7 +649,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                       Text(
                         "Номер телефону водія",
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: textSize,
                             fontWeight: FontWeight.bold,
                             color: colorAccent),
                       ),
@@ -657,9 +662,9 @@ class DriverInfoState extends BaseState<DriverInfo> {
                             _bloc.order.driver.phone = text;
                           }),
                           inputFormatters: [
-                            MaskTextInputFormatter(mask: '+ ## (###) ### ## ##', filter: {
-                              "#": RegExp(r'[0-9]')
-                            })
+                            MaskTextInputFormatter(
+                                mask: '+ ## (###) ### ## ##',
+                                filter: {"#": RegExp(r'[0-9]')})
                           ],
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
@@ -684,7 +689,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                       Text(
                         "Електронна пошта водія",
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: textSize,
                             fontWeight: FontWeight.bold,
                             color: colorAccent),
                       ),
@@ -810,6 +815,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
 
   @override
   Widget getLayout() {
+    double textSize = isMobile() ? 16 : 20;
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Form(
@@ -821,7 +827,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
             Text(
               "Інформація про замовлення",
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: isMobile() ? 20 : 24,
                   fontWeight: FontWeight.bold,
                   color: colorAccent),
             ),
@@ -837,7 +843,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                     Text(
                       "Вантаж",
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: textSize,
                           fontWeight: FontWeight.bold,
                           color: colorAccent),
                     ),
@@ -867,7 +873,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                     Text(
                       "Вага",
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: textSize,
                           fontWeight: FontWeight.bold,
                           color: colorAccent),
                     ),
@@ -923,7 +929,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                     Text(
                       "Пломби",
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: textSize,
                           fontWeight: FontWeight.bold,
                           color: colorAccent),
                     ),
@@ -975,7 +981,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                     Text(
                       "Власник перевізника",
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: textSize,
                           fontWeight: FontWeight.bold,
                           color: colorAccent),
                     ),
@@ -1008,7 +1014,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                     Text(
                       "Пункт відвантаження",
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: textSize,
                           fontWeight: FontWeight.bold,
                           color: colorAccent),
                     ),
@@ -1041,7 +1047,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                     Text(
                       "Пункт розвантаження",
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: textSize,
                           fontWeight: FontWeight.bold,
                           color: colorAccent),
                     ),

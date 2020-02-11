@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:elevator/res/values/colors.dart';
 import 'package:elevator/res/values/styles.dart';
@@ -44,7 +45,10 @@ class _ProfileScreenState extends BaseStatefulScreen<ProfileScreen>
             if (_bloc.user == null) {
               return getProgress(background: false);
             } else {
-              return getProfileContent();
+             if (MediaQuery.of(context).size.shortestSide < 600.0)
+                return getProfileContent();
+              else
+                return getProfileContentTablet();
             }
           },
         ),
@@ -104,6 +108,68 @@ class _ProfileScreenState extends BaseStatefulScreen<ProfileScreen>
             child: BaseButton(
               text: 'Вийти',
               onClick: _askToLogout,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getProfileContentTablet() {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Stack(
+            overflow: Overflow.visible,
+            children: <Widget>[
+              getUserAvatar(_bloc.user.photoUrl, 120),
+              Positioned(
+                right: -16,
+                child: InkWell(
+                  onTap: _pickPhoto,
+                  child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                          color: colorAccent, shape: BoxShape.circle),
+                      child: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      )),
+                ),
+              )
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              _bloc.user.firstName + " " + _bloc.user.lastName,
+              style: getVeryBigFont().apply(color: colorAccent),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              _bloc.user.email,
+              style: getBigFont(),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              _bloc.user.phone,
+              style: getBigFont(),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: SizedBox(
+              width: 300,
+              child: BaseButton(
+                text: 'Вийти',
+                onClick: _askToLogout,
+              ),
             ),
           ),
         ],

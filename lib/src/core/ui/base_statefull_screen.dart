@@ -5,6 +5,7 @@ import 'base_statefull_widget.dart';
 
 abstract class BaseStatefulScreen<B extends BaseStatefulWidget>
     extends BaseState<B> {
+  bool isMobile() => (MediaQuery.of(context).size.shortestSide < 600.0);
 
   @override
   Widget getLayout() {

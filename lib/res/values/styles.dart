@@ -38,7 +38,7 @@ TextStyle getAppBarTheme(BuildContext context){
 
 // black fonts
 TextStyle getVeryBigFont(){
-  return const TextStyle(fontSize: 24,color: Colors.black);
+  return const TextStyle(fontSize: 28,color: Colors.black);
 }
 TextStyle getBigFont(){
   return const TextStyle(fontSize: 20,color: Colors.black);
