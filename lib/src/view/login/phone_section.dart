@@ -14,6 +14,7 @@ import 'package:elevator/src/view/utils/text_field_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class PhoneSignInSection extends BaseStatefulWidget {
   PhoneSignInSection();
@@ -58,6 +59,11 @@ class _PhoneSignInSectionState extends BaseState<PhoneSignInSection> {
                 keyboardType: TextInputType.phone,
                 decoration:
                     getTextFieldDecoration(context, 'Введіть номер телефону'),
+                inputFormatters: [
+                  MaskTextInputFormatter(
+                      mask: '+ 38 (###) ### ## ##',
+                      filter: {"#": RegExp(r'[0-9]')})
+                ],
                 validator: (String value) {
                   if (value.isEmpty) {
                     return 'Формат: (+x xxx-xxx-xxxx)';
@@ -93,6 +99,7 @@ class _PhoneSignInSectionState extends BaseState<PhoneSignInSection> {
         (AuthCredential phoneAuthCredential) {
       _auth.signInWithCredential(phoneAuthCredential);
       showMessage("Ви авторизовані тепер");
+      injector<NavigationService>().pushNamedReplacement(mainRoute);
     };
 
     final PhoneVerificationFailed verificationFailed =

@@ -45,8 +45,8 @@ class ListItem extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: isMobile() ? 16.0 : 32.0),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: isMobile() ? 8.0 : 32.0),
                   child: CustomHero(
                       isRotate: true,
                       tag: order.id,
@@ -64,49 +64,57 @@ class ListItem extends StatelessWidget {
                         Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                          Flexible(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(5.0)),
-                                      border: Border.all(
-                                          color: colorBorder, width: 1)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(6.0),
-                                    child: Text(
-                                      order.car.carNumber,
-                                      style: TextStyle(fontSize: textSizeSmall),
+                              Flexible(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5.0)),
+                                          border: Border.all(
+                                              color: colorBorder, width: 1)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Text(
+                                          order.car.carNumber,
+                                          style: TextStyle(
+                                              fontSize: textSizeSmall),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Text(
-                                      order.car.carModel,
-                                      maxLines: 1,
-                                      softWrap: true,
-                                      overflow: TextOverflow.fade,
-                                      style: TextStyle(fontSize: textSizeBig),
+                                    Flexible(
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          order.car.carModel,
+                                          maxLines: 1,
+                                          softWrap: true,
+                                          overflow: TextOverflow.fade,
+                                          style:
+                                              TextStyle(fontSize: textSizeBig),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: 10,
-                            height: 10,
-                            margin: const EdgeInsets.only(left: 8.0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: borderColor,
-                            ),
-                          ),
-                        ]),
+                              ),
+                              (order.status == OrderStatus.ACCEPTED.index ||
+                                      order.status ==
+                                          OrderStatus.DECLINED.index)
+                                  ? Container(
+                                      width: 10,
+                                      height: 10,
+                                      margin: const EdgeInsets.only(left: 8.0),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: borderColor,
+                                      ),
+                                    )
+                                  : const Offstage(),
+                            ]),
                         Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: isMobile() ? 6 : 10),
@@ -121,7 +129,7 @@ class ListItem extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Expanded(
+                            Flexible(
                               child: Text(
                                 order.driver.getFullName(),
                                 maxLines: 1,
@@ -132,16 +140,14 @@ class ListItem extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                            Expanded(
-                              child: Text(
-                                order.driver.phone,
-                                maxLines: 1,
-                                softWrap: true,
-                                overflow: TextOverflow.fade,
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                  fontSize: textSizeBig,
-                                ),
+                            Text(
+                              order.driver.phone,
+                              maxLines: 1,
+                              softWrap: true,
+                              overflow: TextOverflow.fade,
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                fontSize: textSizeBig,
                               ),
                             ),
                           ],
