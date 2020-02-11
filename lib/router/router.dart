@@ -4,11 +4,12 @@ import 'package:elevator/src/view/main/history/filter/history_filter_screen.dart
 import 'package:elevator/src/view/main/main_screen.dart';
 import 'package:elevator/src/view/order_detail/order_detail_screen.dart';
 import 'package:elevator/src/view/splash/splash_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:elevator/router/route_paths.dart' as routes;
 Route<dynamic> generateRoute(RouteSettings settings) {
-  MaterialPageRoute getPageRoute(Widget screen) {
-    return MaterialPageRoute(builder: (context) => screen, settings: settings);
+  CupertinoPageRoute getPageRoute(Widget screen) {
+    return CupertinoPageRoute(builder: (context) => screen, settings: settings);
   }
 
   switch (settings.name) {

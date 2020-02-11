@@ -4,6 +4,7 @@ import 'package:elevator/router/route_paths.dart';
 import 'package:elevator/src/di/dependency_injection.dart';
 import 'package:elevator/src/domain/models/order_status.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
+import 'package:elevator/src/view/main/home/tabs/custom_hero.dart';
 import 'package:elevator/src/view/utils/image_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,10 @@ class ListItem extends StatelessWidget {
             injector<NavigationService>()
                 .pushNamed(orderDetailRoute, arguments: order);
           },
-          leading: getUserAvatar(order.driver.photoUrl, 50),
+          leading: CustomHero(
+            isRotate: true,
+            tag: order.id,
+              child: getUserAvatar(order.driver.photoUrl, 50)),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

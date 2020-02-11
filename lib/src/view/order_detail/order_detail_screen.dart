@@ -5,8 +5,10 @@ import 'package:elevator/src/core/ui/base_statefull_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/view/custom/BaseButton.dart';
+import 'package:elevator/src/view/main/home/tabs/custom_hero.dart';
 import 'package:elevator/src/view/order_detail/order_details_bloc.dart';
 import 'package:elevator/src/view/utils/date_utils.dart';
+import 'package:elevator/src/view/utils/image_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,6 +55,10 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                           _buildButton("Прийняти", _accept),
                         ],
                       ),
+          CustomHero(
+            tag: _bloc.order.id,
+              isRotate: true,
+              child: getUserAvatar(_bloc.order.driver.photoUrl, 50)),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Row(
