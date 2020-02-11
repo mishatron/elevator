@@ -18,7 +18,7 @@ class ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     Color borderColor = Colors.transparent;
     if (order.status == OrderStatus.ACCEPTED.index)
-      borderColor = Colors.greenAccent;
+      borderColor = colorAccent;
     else if (order.status == OrderStatus.DECLINED.index)
       borderColor = Colors.redAccent;
     bool isMobile() => (MediaQuery.of(context).size.shortestSide < 600.0);
@@ -40,12 +40,13 @@ class ListItem extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 6),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),),
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            ),
             child: Row(
               children: <Widget>[
                 Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: isMobile() ? 16.0 : 32.0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: isMobile() ? 16.0 : 32.0),
                   child: CustomHero(
                       isRotate: true,
                       tag: order.id,
@@ -61,38 +62,54 @@ class ListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5.0)),
-                                  border: Border.all(color: colorBorder,width: 1)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Text(
-                                  order.car.carNumber,
-                                  style: TextStyle(fontSize: textSizeSmall),
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                          Flexible(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(5.0)),
+                                      border: Border.all(
+                                          color: colorBorder, width: 1)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Text(
+                                      order.car.carNumber,
+                                      style: TextStyle(fontSize: textSizeSmall),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            Flexible(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                  order.car.carModel,
-                                  maxLines: 1,
-                                  softWrap: true,
-                                  overflow: TextOverflow.fade,
-                                  style: TextStyle(fontSize: textSizeBig),
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      order.car.carModel,
+                                      maxLines: 1,
+                                      softWrap: true,
+                                      overflow: TextOverflow.fade,
+                                      style: TextStyle(fontSize: textSizeBig),
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Container(
+                            width: 10,
+                            height: 10,
+                            margin: const EdgeInsets.only(left: 8.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: borderColor,
+                            ),
+                          ),
+                        ]),
                         Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: isMobile() ? 6 : 10),
+                          padding: EdgeInsets.symmetric(
+                              vertical: isMobile() ? 6 : 10),
                           child: Text(
                             order.goods[0].name +
                                 " " +
