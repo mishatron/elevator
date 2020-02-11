@@ -32,25 +32,28 @@ class _PhoneSignInSectionState extends BaseState<VerifySection> {
 
   @override
   Widget getLayout() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Image.asset("assets/login_placeholder.png"),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextFormField(
-              controller: _smsController,
-              decoration:
-                  getTextFieldDecoration(context, "Введіть код підтвердження")),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: BaseButton(
-            onClick: _signInWithPhoneNumber,
-            text: "Підтвердити",
+    return Padding(
+      padding: const EdgeInsets.only(top: 32.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Image.asset("assets/login_placeholder.png"),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextFormField(
+                controller: _smsController,
+                decoration:
+                    getTextFieldDecoration(context, "Введіть код підтвердження")),
           ),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
+            child: BaseButton(
+              onClick: _signInWithPhoneNumber,
+              text: "Підтвердити",
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -37,49 +37,52 @@ class _PhoneSignInSectionState extends BaseState<PhoneSignInSection> {
 
   @override
   Widget getLayout() {
-    return InkWell(
-      splashColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onTap: () {
-        _focusNode.unfocus();
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Image.asset("assets/login_placeholder.png"),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextFormField(
-              controller: _phoneNumberController,
-              focusNode: _focusNode,
-              keyboardType: TextInputType.phone,
-              decoration:
-                  getTextFieldDecoration(context, 'Введіть номер телефону'),
-              validator: (String value) {
-                if (value.isEmpty) {
-                  return 'Формат: (+x xxx-xxx-xxxx)';
-                }
-                return null;
-              },
+    return Padding(
+      padding: const EdgeInsets.only(top: 32.0),
+      child: InkWell(
+        splashColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: () {
+          _focusNode.unfocus();
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Image.asset("assets/login_placeholder.png"),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextFormField(
+                controller: _phoneNumberController,
+                focusNode: _focusNode,
+                keyboardType: TextInputType.phone,
+                decoration:
+                    getTextFieldDecoration(context, 'Введіть номер телефону'),
+                validator: (String value) {
+                  if (value.isEmpty) {
+                    return 'Формат: (+x xxx-xxx-xxxx)';
+                  }
+                  return null;
+                },
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: BaseButton(
-              text: 'Далі',
-              onClick: _verifyPhoneNumber,
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: BaseButton(
+                text: 'Далі',
+                onClick: _verifyPhoneNumber,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(
-              "Натискаючи кнопку “Далі”, я приймаю умови Політики конфіденційності.",
-              textAlign: TextAlign.center,
-              style: getSmallFont(),
-            ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Text(
+                "Натискаючи кнопку “Далі”, я приймаю умови Політики конфіденційності.",
+                textAlign: TextAlign.center,
+                style: getSmallFont(),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

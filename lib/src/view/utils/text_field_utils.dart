@@ -17,6 +17,6 @@ InputDecoration getTextFieldDecoration(BuildContext context, String hintText) {
       errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(color: Colors.redAccent)),
-      labelStyle: TextStyle(fontSize: 16, color: colorAccent),
+      labelStyle: TextStyle(fontSize: 16),
       labelText: hintText);
 }
