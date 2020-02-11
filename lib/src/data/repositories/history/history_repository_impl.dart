@@ -59,4 +59,27 @@ class HistoryRepositoryImpl extends HistoryRepository {
       }).toList();
     });
   }
+
+  @override
+  Future<List<Order>> getFilteredByNumber(String carNumber) {
+    return Firestore.instance
+        .collection('history')
+        .where("order.car.carNumber",
+            isGreaterThanOrEqualTo: carNumber.toUpperCase())
+        .getDocuments()
+        .then((snapshot) {
+      List<Order> result = [];
+      List<Order> tmp = snapshot.documents.map((doc) {
+        return History.fromJsonMap(doc.data).order..id = doc.documentID;
+      }).toList();
+      tmp.forEach((it) {
+        if (it.car.carNumber
+            .toUpperCase()
+            .startsWith(carNumber.toUpperCase())) {
+          result.add(it);
+        }
+      });
+      return result;
+    });
+  }
 }

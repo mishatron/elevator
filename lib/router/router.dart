@@ -1,6 +1,7 @@
 import 'package:elevator/src/view/create_order/create_order_screen.dart';
 import 'package:elevator/src/view/login/login_screen.dart';
 import 'package:elevator/src/view/main/history/filter/history_filter_screen.dart';
+import 'package:elevator/src/view/main/history/search/search_screen.dart';
 import 'package:elevator/src/view/main/main_screen.dart';
 import 'package:elevator/src/view/order_detail/order_detail_screen.dart';
 import 'package:elevator/src/view/splash/splash_screen.dart';
@@ -25,6 +26,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return getPageRoute(CreateOrderScreen());
     case routes.filteredHistoryRoute:
       return getPageRoute(HistoryFilterScreen());
+    case routes.searchHistoryRoute:
+      return getPageRoute(SearchScreen());
 
     default:
       return MaterialPageRoute(

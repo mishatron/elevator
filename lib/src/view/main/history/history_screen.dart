@@ -37,7 +37,9 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
               Icons.search,
               color: colorAccent,
             ),
-            onPressed: () {},
+            onPressed: () {
+              injector<NavigationService>().pushNamed(searchHistoryRoute);
+            },
           ),
           IconButton(
             icon: Icon(
