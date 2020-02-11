@@ -48,7 +48,6 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
           ),
         ],
         bottom: TabBar(
-          labelColor: colorAccent,
           indicatorColor: colorAccent,
           labelStyle: getMidFont(),
           tabs: <Widget>[

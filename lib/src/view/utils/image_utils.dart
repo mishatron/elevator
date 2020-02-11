@@ -10,7 +10,6 @@ Widget _getUserImagePlaceholder(double size) {
     height: size,
     decoration: BoxDecoration(
       shape: BoxShape.circle,
-      border: Border.all(color: colorAccent, width: 1),
       image: DecorationImage(
         image: AssetImage("assets/ic_avatar.png"),
         fit: BoxFit.cover,
@@ -27,7 +26,6 @@ Widget getUserAvatar(String url, double size){
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: colorAccent, width: 1),
         image: DecorationImage(
           image: imageProvider,
           fit: BoxFit.cover,

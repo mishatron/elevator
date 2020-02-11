@@ -68,12 +68,12 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                            border: Border.all(color: colorAccent, width: 1)),
+                            border: Border.all( width: 1)),
                         child: Padding(
                           padding: const EdgeInsets.all(6.0),
                           child: Text(
                             _bloc.order.car.carNumber,
-                            style: TextStyle(color: colorAccent, fontSize: 14),
+                            style: TextStyle( fontSize: 14),
                           ),
                         ),
                       ),
@@ -85,7 +85,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                             maxLines: 1,
                             softWrap: true,
                             overflow: TextOverflow.fade,
-                            style: TextStyle(color: colorAccent, fontSize: 16),
+                            style: TextStyle( fontSize: 16),
                           ),
                         ),
                       ),
@@ -105,7 +105,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                         softWrap: true,
                         overflow: TextOverflow.fade,
                         style: TextStyle(
-                            color: colorAccent,
+
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       ),
@@ -117,7 +117,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                       overflow: TextOverflow.fade,
                       textAlign: TextAlign.end,
                       style: TextStyle(
-                        color: colorAccent,
+
                         fontSize: 16,
                       ),
                     ),
@@ -130,18 +130,17 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                     children: <Widget>[
                       Text(
                         "Номер причіпу ",
-                        style: TextStyle(color: colorAccent),
                       ),
                       Container(
                         decoration: BoxDecoration(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(5.0)),
-                            border: Border.all(color: colorAccent, width: 1)),
+                            border: Border.all( width: 1)),
                         child: Padding(
                           padding: const EdgeInsets.all(6.0),
                           child: Text(
                             _bloc.order.car.trailerNumber,
-                            style: TextStyle(color: colorAccent, fontSize: 14),
+                            style: TextStyle( fontSize: 14),
                           ),
                         ),
                       ),
@@ -152,7 +151,6 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                   padding: const EdgeInsets.only(top: 10),
                   child: Text(
                     'Список пломб',
-                    style: TextStyle(color: colorAccent),
                   ),
                 ),
                 _buildStampsItem(_bloc.order),
@@ -160,7 +158,6 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                   padding: const EdgeInsets.only(top: 10),
                   child: Text(
                     'Вантаж',
-                    style: TextStyle(color: colorAccent),
                   ),
                 ),
                 _buildGoodsItem(_bloc.order),
@@ -195,7 +192,6 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                     softWrap: true,
                     maxLines: 1,
                     overflow: TextOverflow.fade,
-                    style: TextStyle(color: colorAccent),
                   ),
                 ),
                 CupertinoSwitch(
@@ -226,7 +222,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                        border: Border.all(color: colorAccent, width: 1)),
+                        border: Border.all( width: 1)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 15),
@@ -239,12 +235,10 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                               softWrap: true,
                               maxLines: 1,
                               overflow: TextOverflow.fade,
-                              style: TextStyle(color: colorAccent),
                             ),
                           ),
                           Text(
                             o.count.toString() + " т",
-                            style: TextStyle(color: colorAccent),
                           )
                         ],
                       ),
@@ -262,7 +256,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(
             title,
-            style: TextStyle(color: colorAccent, fontSize: 14),
+            style: TextStyle( fontSize: 14),
           ),
         ),
         Padding(
@@ -271,7 +265,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
             width: double.infinity,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                border: Border.all(color: colorAccent, width: 1)),
+                border: Border.all( width: 1)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               child: Text(
@@ -279,7 +273,7 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                 softWrap: true,
                 maxLines: 1,
                 overflow: TextOverflow.fade,
-                style: TextStyle(color: colorAccent, fontSize: 17),
+                style: TextStyle( fontSize: 17),
               ),
             ),
           ),

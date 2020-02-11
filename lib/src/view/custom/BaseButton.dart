@@ -17,7 +17,7 @@ class BaseButton extends StatelessWidget {
       this.textRes,
       this.text,
       this.onClick,
-      this.radius = 50.0,
+      this.radius = 5.0,
       this.textColor = Colors.white,
       this.buttonColor = colorAccent,
       this.borderColor = colorAccent})

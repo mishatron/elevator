@@ -16,7 +16,7 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color borderColor = colorAccent;
+    Color borderColor = Colors.transparent;
     if (order.status == OrderStatus.ACCEPTED.index)
       borderColor = Colors.greenAccent;
     else if (order.status == OrderStatus.DECLINED.index)
@@ -28,115 +28,113 @@ class ListItem extends StatelessWidget {
 
     return Padding(
       padding: isMobile()
-          ? const EdgeInsets.all(8.0)
+          ? const EdgeInsets.symmetric(horizontal: 8.0)
           : const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
       child: RawMaterialButton(
         onPressed: () {
           injector<NavigationService>()
               .pushNamed(orderDetailRoute, arguments: order);
         },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 6),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              border: Border.all(color: borderColor, width: 1)),
-          child: Row(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: isMobile() ? 16.0 : 32.0),
-                child: CustomHero(
-                    isRotate: true,
-                    tag: order.id,
-                    child: getUserAvatar(
-                        order.driver.photoUrl, isMobile() ? 50 : 80)),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5.0)),
-                                border: Border.all(color: colorAccent, width: 1)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: Text(
-                                order.car.carNumber,
-                                style: TextStyle(
-                                    color: colorAccent, fontSize: textSizeSmall),
+        child: Card(
+          elevation: 6.0,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: isMobile() ? 16.0 : 32.0),
+                  child: CustomHero(
+                      isRotate: true,
+                      tag: order.id,
+                      child: getUserAvatar(
+                          order.driver.photoUrl, isMobile() ? 50 : 80)),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5.0)),
+                                  border: Border.all(width: 1)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Text(
+                                  order.car.carNumber,
+                                  style: TextStyle(fontSize: textSizeSmall),
+                                ),
                               ),
                             ),
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
+                                  order.car.carModel,
+                                  maxLines: 1,
+                                  softWrap: true,
+                                  overflow: TextOverflow.fade,
+                                  style: TextStyle(fontSize: textSizeBig),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(vertical: isMobile() ? 6 : 10),
+                          child: Text(
+                            order.goods[0].name +
+                                " " +
+                                order.goods[0].count.toString() +
+                                "т",
+                            style: TextStyle(fontSize: textSizeSmall),
                           ),
-                          Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
                               child: Text(
-                                order.car.carModel,
+                                order.driver.getFullName(),
                                 maxLines: 1,
                                 softWrap: true,
                                 overflow: TextOverflow.fade,
                                 style: TextStyle(
-                                    color: colorAccent, fontSize: textSizeBig),
+                                    fontSize: textSizeBig,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: isMobile() ? 6 : 10),
-                        child: Text(
-                          order.goods[0].name +
-                              " " +
-                              order.goods[0].count.toString() +
-                              "т",
-                          style: TextStyle(
-                              color: colorAccent, fontSize: textSizeSmall),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              order.driver.getFullName(),
-                              maxLines: 1,
-                              softWrap: true,
-                              overflow: TextOverflow.fade,
-                              style: TextStyle(
-                                  color: colorAccent,
+                            Expanded(
+                              child: Text(
+                                order.driver.phone,
+                                maxLines: 1,
+                                softWrap: true,
+                                overflow: TextOverflow.fade,
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
                                   fontSize: textSizeBig,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              order.driver.phone,
-                              maxLines: 1,
-                              softWrap: true,
-                              overflow: TextOverflow.fade,
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                color: colorAccent,
-                                fontSize: textSizeBig,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    ],
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

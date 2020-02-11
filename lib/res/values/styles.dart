@@ -9,7 +9,7 @@ ThemeData buildThemeData() {
       primaryColor: colorPrimary,
       accentColor: colorAccent,
       primaryColorDark: colorPrimaryDark,
-      scaffoldBackgroundColor: Colors.white,
+      scaffoldBackgroundColor: colorPrimaryDark,
       primaryTextTheme:
       _buildTextTheme(baseTheme.primaryTextTheme, colorPrimaryText),
       buttonColor: colorPrimary,
@@ -30,8 +30,7 @@ TextStyle getAppBarTheme(BuildContext context){
   return Theme.of(context)
       .copyWith()
       .textTheme
-      .title
-      .copyWith(color: colorAccent);
+      .title;
 }
 
 

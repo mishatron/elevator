@@ -104,7 +104,7 @@ class _ProfileScreenState extends BaseStatefulScreen<ProfileScreen>
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(top:16.0),
             child: BaseButton(
               text: 'Вийти',
               onClick: _askToLogout,

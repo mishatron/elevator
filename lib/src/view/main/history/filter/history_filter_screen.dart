@@ -31,7 +31,6 @@ class _HistoryFilterScreenState extends BaseStatefulScreen<HistoryFilterScreen>
     return getAppBar(context, 'Історія',
         leading: getBack(),
         bottom: TabBar(
-          labelColor: colorAccent,
           indicatorColor: colorAccent,
           labelStyle: getMidFont(),
           tabs: <Widget>[

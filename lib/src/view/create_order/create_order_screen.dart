@@ -198,7 +198,7 @@ class CarInfoState extends BaseState<CarInfo> {
               style: TextStyle(
                   fontSize: isMobile() ? 20 : 26,
                   fontWeight: FontWeight.bold,
-                  color: colorAccent),
+                  color: colorBorder),
             ),
           ),
           Padding(
@@ -209,7 +209,7 @@ class CarInfoState extends BaseState<CarInfo> {
               style: TextStyle(
                   fontSize: isMobile() ? 16 : 20,
                   fontWeight: FontWeight.bold,
-                  color: colorAccent),
+                  color: colorBorder),
             ),
           ),
           StreamBuilder(
@@ -234,13 +234,13 @@ class CarInfoState extends BaseState<CarInfo> {
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      border: Border.all(color: colorAccent, width: 1)),
+                      border: Border.all(color: colorBorder, width: 1)),
                   child: DropdownButtonHideUnderline(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
                       child: DropdownButton(
-                          iconEnabledColor: colorAccent,
-                          iconDisabledColor: colorAccent,
+                          iconEnabledColor: colorBorder,
+                          iconDisabledColor: colorBorder,
                           isExpanded: true,
                           value: _bloc.order.car == null
                               ? null
@@ -250,8 +250,7 @@ class CarInfoState extends BaseState<CarInfo> {
                           hint: Text(
                             "Виберіть авто",
                             style: TextStyle(
-                                color: colorAccent,
-                                fontSize: textSize),
+                                color: colorBorder, fontSize: textSize),
                           ),
                           items: _dropDownMenuItems,
                           onChanged: (val) {
@@ -278,7 +277,7 @@ class CarInfoState extends BaseState<CarInfo> {
               child: Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
-                    side: BorderSide(width: 1, color: colorAccent)),
+                    side: BorderSide(width: 1, color: colorBorder)),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
@@ -289,7 +288,7 @@ class CarInfoState extends BaseState<CarInfo> {
                         style: TextStyle(
                             fontSize: textSize,
                             fontWeight: FontWeight.bold,
-                            color: colorAccent),
+                            color: colorBorder),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -315,11 +314,11 @@ class CarInfoState extends BaseState<CarInfo> {
                             hintText: "Введіть номер автомобіля",
                             enabledBorder: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                             border: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                           ),
                           controller: _carNumberController,
@@ -330,7 +329,7 @@ class CarInfoState extends BaseState<CarInfo> {
                         style: TextStyle(
                             fontSize: textSize,
                             fontWeight: FontWeight.bold,
-                            color: colorAccent),
+                            color: colorBorder),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -350,11 +349,11 @@ class CarInfoState extends BaseState<CarInfo> {
                             hintText: "Введіть марку автомобіля",
                             enabledBorder: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                             border: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                           ),
                           controller: _carModelController,
@@ -365,7 +364,7 @@ class CarInfoState extends BaseState<CarInfo> {
                         style: TextStyle(
                             fontSize: textSize,
                             fontWeight: FontWeight.bold,
-                            color: colorAccent),
+                            color: colorBorder),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -391,11 +390,11 @@ class CarInfoState extends BaseState<CarInfo> {
                             hintText: "Введіть номер причіпу",
                             enabledBorder: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                             border: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                           ),
                           controller: _trailerNumberController,
@@ -432,8 +431,6 @@ class CarInfoState extends BaseState<CarInfo> {
                       _bloc.streamController.add(Events.ON_NEXT_TO_DRIVER_INFO);
                     },
                     text: "Далі",
-                    buttonColor: colorAccent,
-                    borderColor: colorAccent,
                     textColor: Colors.white,
                   ),
                 ),
@@ -498,7 +495,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
               style: TextStyle(
                   fontSize: isMobile() ? 20 : 24,
                   fontWeight: FontWeight.bold,
-                  color: colorAccent),
+                  color: colorBorder),
             ),
           ),
           Padding(
@@ -509,7 +506,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
               style: TextStyle(
                   fontSize: textSize,
                   fontWeight: FontWeight.bold,
-                  color: colorAccent),
+                  color: colorBorder),
             ),
           ),
           StreamBuilder(
@@ -534,7 +531,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      border: Border.all(color: colorAccent, width: 1)),
+                      border: Border.all(color: colorBorder, width: 1)),
                   child: DropdownButtonHideUnderline(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -543,7 +540,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                           value: _bloc.order.driver,
                           hint: Text(
                             "Виберіть водія",
-                            style: TextStyle(color: colorAccent),
+                            style: TextStyle(color: colorBorder),
                           ),
                           items: _dropDownMenuItems,
                           onChanged: (val) {
@@ -572,7 +569,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
               child: Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
-                    side: BorderSide(width: 1, color: colorAccent)),
+                    side: BorderSide(width: 1, color: colorBorder)),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
@@ -583,7 +580,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         style: TextStyle(
                             fontSize: textSize,
                             fontWeight: FontWeight.bold,
-                            color: colorAccent),
+                            color: colorBorder),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -602,11 +599,11 @@ class DriverInfoState extends BaseState<DriverInfo> {
                             hintText: "Введіть ім'я водія",
                             enabledBorder: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                             border: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                           ),
                           controller: _driverFirstNameController,
@@ -617,7 +614,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         style: TextStyle(
                             fontSize: textSize,
                             fontWeight: FontWeight.bold,
-                            color: colorAccent),
+                            color: colorBorder),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -636,11 +633,11 @@ class DriverInfoState extends BaseState<DriverInfo> {
                             hintText: "Введіть прізвище водія",
                             enabledBorder: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                             border: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                           ),
                           controller: _driverLastNameController,
@@ -651,7 +648,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         style: TextStyle(
                             fontSize: textSize,
                             fontWeight: FontWeight.bold,
-                            color: colorAccent),
+                            color: colorBorder),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -676,11 +673,11 @@ class DriverInfoState extends BaseState<DriverInfo> {
                             hintText: "Введіть номер телефону водія",
                             enabledBorder: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                             border: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                           ),
                           controller: _driverPhoneController,
@@ -691,7 +688,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                         style: TextStyle(
                             fontSize: textSize,
                             fontWeight: FontWeight.bold,
-                            color: colorAccent),
+                            color: colorBorder),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -710,11 +707,11 @@ class DriverInfoState extends BaseState<DriverInfo> {
                             hintText: "Введіть електронну пошту водія",
                             enabledBorder: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                             border: const OutlineInputBorder(
                               borderSide: const BorderSide(
-                                  color: colorAccent, width: 1),
+                                  color: colorBorder, width: 1),
                             ),
                           ),
                           controller: _driverEmailController,
@@ -751,8 +748,6 @@ class DriverInfoState extends BaseState<DriverInfo> {
                       _bloc.streamController.add(Events.ON_NEXT_TO_ORDER_INFO);
                     },
                     text: "Далі",
-                    buttonColor: colorAccent,
-                    borderColor: colorAccent,
                     textColor: Colors.white,
                   ),
                 ),
@@ -829,12 +824,12 @@ class OrderInfoState extends BaseState<OrderInfo> {
               style: TextStyle(
                   fontSize: isMobile() ? 20 : 24,
                   fontWeight: FontWeight.bold,
-                  color: colorAccent),
+                  color: colorBorder),
             ),
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5)),
-                  side: BorderSide(width: 1, color: colorAccent)),
+                  side: BorderSide(width: 1, color: colorBorder)),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -845,7 +840,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       style: TextStyle(
                           fontSize: textSize,
                           fontWeight: FontWeight.bold,
-                          color: colorAccent),
+                          color: colorBorder),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -861,11 +856,11 @@ class OrderInfoState extends BaseState<OrderInfo> {
                           hintText: "Введіть вантаж",
                           enabledBorder: const OutlineInputBorder(
                             borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                const BorderSide(color: colorBorder, width: 1),
                           ),
                           border: const OutlineInputBorder(
                             borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                const BorderSide(color: colorBorder, width: 1),
                           ),
                         ),
                       ),
@@ -875,7 +870,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       style: TextStyle(
                           fontSize: textSize,
                           fontWeight: FontWeight.bold,
-                          color: colorAccent),
+                          color: colorBorder),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -898,11 +893,11 @@ class OrderInfoState extends BaseState<OrderInfo> {
                                 hintText: "Введіть вагу",
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: const BorderSide(
-                                      color: colorAccent, width: 1),
+                                      color: colorBorder, width: 1),
                                 ),
                                 border: const OutlineInputBorder(
                                   borderSide: const BorderSide(
-                                      color: colorAccent, width: 1),
+                                      color: colorBorder, width: 1),
                                 ),
                               ),
                             ),
@@ -920,7 +915,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5)),
-                  side: BorderSide(width: 1, color: colorAccent)),
+                  side: BorderSide(width: 1, color: colorBorder)),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -931,7 +926,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       style: TextStyle(
                           fontSize: textSize,
                           fontWeight: FontWeight.bold,
-                          color: colorAccent),
+                          color: colorBorder),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -949,11 +944,11 @@ class OrderInfoState extends BaseState<OrderInfo> {
                                 hintText: "Введіть номер пломби",
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: const BorderSide(
-                                      color: colorAccent, width: 1),
+                                      color: colorBorder, width: 1),
                                 ),
                                 border: const OutlineInputBorder(
                                   borderSide: const BorderSide(
-                                      color: colorAccent, width: 1),
+                                      color: colorBorder, width: 1),
                                 ),
                               ),
                             ),
@@ -972,7 +967,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5)),
-                  side: BorderSide(width: 1, color: colorAccent)),
+                  side: BorderSide(width: 1, color: colorBorder)),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -983,7 +978,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       style: TextStyle(
                           fontSize: textSize,
                           fontWeight: FontWeight.bold,
-                          color: colorAccent),
+                          color: colorBorder),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -1001,11 +996,11 @@ class OrderInfoState extends BaseState<OrderInfo> {
                           hintText: "Введіть власника перевізника",
                           enabledBorder: const OutlineInputBorder(
                             borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                const BorderSide(color: colorBorder, width: 1),
                           ),
                           border: const OutlineInputBorder(
                             borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                const BorderSide(color: colorBorder, width: 1),
                           ),
                         ),
                         controller: _orderOwnerController,
@@ -1016,7 +1011,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       style: TextStyle(
                           fontSize: textSize,
                           fontWeight: FontWeight.bold,
-                          color: colorAccent),
+                          color: colorBorder),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -1034,11 +1029,11 @@ class OrderInfoState extends BaseState<OrderInfo> {
                           hintText: "Введіть пункт відвантаження",
                           enabledBorder: const OutlineInputBorder(
                             borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                const BorderSide(color: colorBorder, width: 1),
                           ),
                           border: const OutlineInputBorder(
                             borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                const BorderSide(color: colorBorder, width: 1),
                           ),
                         ),
                         controller: _orderFromController,
@@ -1049,7 +1044,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       style: TextStyle(
                           fontSize: textSize,
                           fontWeight: FontWeight.bold,
-                          color: colorAccent),
+                          color: colorBorder),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -1066,11 +1061,11 @@ class OrderInfoState extends BaseState<OrderInfo> {
                           hintText: "Введіть пунки розвантаження",
                           enabledBorder: const OutlineInputBorder(
                             borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                const BorderSide(color: colorBorder, width: 1),
                           ),
                           border: const OutlineInputBorder(
                             borderSide:
-                                const BorderSide(color: colorAccent, width: 1),
+                                const BorderSide(color: colorBorder, width: 1),
                           ),
                         ),
                         controller: _orderToController,
@@ -1106,8 +1101,6 @@ class OrderInfoState extends BaseState<OrderInfo> {
                         _bloc.streamController.add(Events.CREATE_ORDER);
                       },
                       text: "Створити",
-                      buttonColor: colorAccent,
-                      borderColor: colorAccent,
                       textColor: Colors.white,
                     ),
                   ),
@@ -1140,7 +1133,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                               _bloc.order.stamps.remove(item);
                             });
                           },
-                          backgroundColor: colorAccent,
+                          backgroundColor: colorBorder,
                           label: Text(
                             item.stampNumber,
                             style: getMidFontWhite(),
@@ -1172,7 +1165,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                               _bloc.order.goods.remove(item);
                             });
                           },
-                          backgroundColor: colorAccent,
+                          backgroundColor: colorBorder,
                           label: Text(
                             item.name + " " + item.count.toString() + " т",
                             style: getMidFontWhite(),

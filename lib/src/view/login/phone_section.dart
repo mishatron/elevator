@@ -76,7 +76,7 @@ class _PhoneSignInSectionState extends BaseState<PhoneSignInSection> {
             child: Text(
               "Натискаючи кнопку “Далі”, я приймаю умови Політики конфіденційності.",
               textAlign: TextAlign.center,
-              style: getSmallFont().apply(color: colorAccent),
+              style: getSmallFont(),
             ),
           )
         ],

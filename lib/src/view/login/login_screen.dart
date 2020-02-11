@@ -41,8 +41,8 @@ class _LoginScreenState extends BaseStatefulScreen<LoginScreen>
                 padding:
                     const EdgeInsets.only(left: 16.0, right: 16.0, top: 64.0),
                 child: Text(
-                  'ВХІД',
-                  style: TextStyle(color: colorAccent, fontSize: 40),
+                  'Вхід',
+                  style: TextStyle(fontSize: 40),
                 ),
               ),
               BlocBuilder<LoginBloc, DoubleBlocState>(

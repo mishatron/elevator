@@ -64,7 +64,6 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
     return getAppBar(context, 'Головна',
         bottom: TabBar(
           controller: _tabController,
-          labelColor: colorAccent,
           indicatorColor: colorAccent,
           labelStyle: getMidFont(),
           tabs: <Widget>[
