@@ -305,7 +305,7 @@ class CarInfoState extends BaseState<CarInfo> {
                           },
                           inputFormatters: [
                             MaskTextInputFormatter(mask: '== #### ==', filter: {
-                              "=": RegExp(r'[А-Я]'),
+                              "=": RegExp(r'[А-ЯІЇЄ]'),
                               "#": RegExp(r'[0-9]')
                             })
                           ],
@@ -371,7 +371,7 @@ class CarInfoState extends BaseState<CarInfo> {
                           textCapitalization: TextCapitalization.characters,
                           inputFormatters: [
                             MaskTextInputFormatter(mask: '== #### ==', filter: {
-                              "=": RegExp(r'[А-Я]'),
+                              "=": RegExp(r'[А-ЯІЇЄ]'),
                               "#": RegExp(r'[0-9]')
                             })
                           ],
@@ -841,6 +841,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                       child: TextFormField(
                         controller: _cargoController,
                         focusNode: _cargoFocusNode,
+                        textCapitalization: TextCapitalization.sentences,
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (_) {
                           _cargoFocusNode.unfocus();
@@ -980,6 +981,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                         onChanged: ((String text) {
                           _bloc.order.owner = text;
                         }),
+                        textCapitalization: TextCapitalization.words,
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (_) {
                           _ownerFocusNode.unfocus();
@@ -1012,6 +1014,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                         onChanged: ((String text) {
                           _bloc.order.from = text;
                         }),
+                        textCapitalization: TextCapitalization.words,
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (_) {
                           _fromFocusNode.unfocus();
@@ -1048,6 +1051,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                         onFieldSubmitted: (_) {
                           _toFocusNode.unfocus();
                         },
+                        textCapitalization: TextCapitalization.words,
                         decoration: InputDecoration(
                           hintText: "Введіть пункт розвантаження",
                           enabledBorder: const OutlineInputBorder(
