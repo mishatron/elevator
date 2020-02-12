@@ -91,4 +91,27 @@ class OrderRepositoryImpl extends OrderRepository {
       throw OfflineException();
     });
   }
+
+  @override
+  Future<List<Order>> getFilteredByNumber(String carNumber, int type) {
+    return Firestore.instance
+        .collection('orders')
+        .where("type", isEqualTo: type)
+        .where("car.carNumber", isGreaterThanOrEqualTo: carNumber.toUpperCase())
+        .getDocuments()
+        .then((snapshot) {
+      List<Order> result = [];
+      List<Order> tmp = snapshot.documents.map((doc) {
+        return Order.fromJsonMap(doc.data);
+      }).toList();
+      tmp.forEach((it) {
+        if (it.car.carNumber
+            .toUpperCase()
+            .startsWith(carNumber.toUpperCase())) {
+          result.add(it);
+        }
+      });
+      return result;
+    });
+  }
 }

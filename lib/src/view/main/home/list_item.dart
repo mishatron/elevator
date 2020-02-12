@@ -48,7 +48,7 @@ class ListItem extends StatelessWidget {
                   padding:
                       EdgeInsets.symmetric(horizontal: isMobile() ? 8.0 : 32.0),
                   child: CustomHero(
-                      isRotate: true,
+                      isScale: true,
                       tag: order.id,
                       child: getUserAvatar(
                           order.driver.photoUrl, isMobile() ? 50 : 80)),

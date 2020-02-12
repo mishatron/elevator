@@ -23,10 +23,18 @@ class HistoryScreen extends BaseStatefulWidget {
 }
 
 class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
-    with BaseBlocListener {
+    with BaseBlocListener, SingleTickerProviderStateMixin {
   HistoryBloc _bloc = HistoryBloc();
+  TabController _tabController;
 
   List<Widget> tabs = [EnteredHistoryTab(), LeftHistoryTab()];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   Widget buildAppbar() {
@@ -38,7 +46,8 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
               color: colorAccent,
             ),
             onPressed: () {
-              injector<NavigationService>().pushNamed(searchHistoryRoute);
+              injector<NavigationService>().pushNamed(searchHistoryRoute,
+                  arguments: _tabController.index);
             },
           ),
           IconButton(
@@ -50,6 +59,7 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
           ),
         ],
         bottom: TabBar(
+          controller: _tabController,
           indicatorColor: colorAccent,
           labelStyle: getMidFont(),
           tabs: <Widget>[
@@ -66,14 +76,11 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
   @override
   Widget getLayout() {
     return SafeArea(
-      child: DefaultTabController(
-        length: tabs.length,
-        child: Scaffold(
-          key: scaffoldKey,
-          appBar: buildAppbar(),
-          body: buildBody(),
-          resizeToAvoidBottomInset: true,
-        ),
+      child: Scaffold(
+        key: scaffoldKey,
+        appBar: buildAppbar(),
+        body: buildBody(),
+        resizeToAvoidBottomInset: true,
       ),
     );
   }
@@ -88,6 +95,7 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
         child: BlocBuilder<HistoryBloc, DoubleBlocState>(
           builder: (context, state) {
             return TabBarView(
+              controller: _tabController,
               children: tabs,
             );
           },
@@ -106,8 +114,8 @@ class _HistoryScreenState extends BaseStatefulScreen<HistoryScreen>
     if (selectedDate != null) {
       Bundle bundle = Bundle();
       bundle.putDynamic("date", selectedDate);
-      injector<NavigationService>().pushNamed(
-          filteredHistoryRoute, arguments: bundle);
+      injector<NavigationService>()
+          .pushNamed(filteredHistoryRoute, arguments: bundle);
     }
   }
 

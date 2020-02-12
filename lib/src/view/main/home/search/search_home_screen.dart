@@ -2,14 +2,15 @@ import 'package:elevator/res/values/styles.dart';
 import 'package:elevator/src/core/ui/base_stateless_widget.dart';
 import 'package:elevator/src/core/ui/ui_utils.dart';
 import 'package:elevator/src/data/repositories/history/history_repository.dart';
+import 'package:elevator/src/data/repositories/order/order_repository.dart';
 import 'package:elevator/src/di/dependency_injection.dart';
 import 'package:elevator/src/domain/responses/order/order.dart';
 import 'package:elevator/src/view/main/home/list_item.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
 
-class SearchScreen extends BaseStatelessWidget {
-  final HistoryRepository _historyRepository = injector.get();
+class SearchHomeScreen extends BaseStatelessWidget {
+  final OrderRepository _ordersRepository = injector.get();
   final SearchBarController<Order> _searchBarController = SearchBarController();
 
   @override
@@ -17,7 +18,7 @@ class SearchScreen extends BaseStatelessWidget {
     int type = ModalRoute.of(context).settings.arguments;
 
     Future<List<Order>> search(String text){
-      return _historyRepository.getFilteredByNumber(text, type);
+      return _ordersRepository.getFilteredByNumber(text, type);
     }
 
     return Scaffold(

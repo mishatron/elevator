@@ -297,6 +297,7 @@ class CarInfoState extends BaseState<CarInfo> {
                           onChanged: ((String text) {
                             _bloc.order.car.carNumber = text;
                           }),
+                          textCapitalization: TextCapitalization.characters,
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             _carNumberFocusNode.unfocus();
@@ -367,6 +368,7 @@ class CarInfoState extends BaseState<CarInfo> {
                         child: TextFormField(
                           focusNode: _trailerNumberFocusNode,
                           key: UniqueKey(),
+                          textCapitalization: TextCapitalization.characters,
                           inputFormatters: [
                             MaskTextInputFormatter(mask: '== #### ==', filter: {
                               "=": RegExp(r'[А-Я]'),
@@ -584,6 +586,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                           onChanged: ((String text) {
                             _bloc.order.driver.firstName = text;
                           }),
+                          textCapitalization: TextCapitalization.sentences,
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             _firstNameFocusNode.unfocus();
@@ -617,6 +620,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                           onChanged: ((String text) {
                             _bloc.order.driver.lastName = text;
                           }),
+                          textCapitalization: TextCapitalization.sentences,
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             _lastNameFocusNode.unfocus();
@@ -655,7 +659,7 @@ class DriverInfoState extends BaseState<DriverInfo> {
                                 mask: '+ 38 (###) ### ## ##',
                                 filter: {"#": RegExp(r'[0-9]')})
                           ],
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.phone,
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             _phoneFocusNode.unfocus();

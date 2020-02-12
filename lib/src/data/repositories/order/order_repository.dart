@@ -21,4 +21,5 @@ abstract class OrderRepository extends BaseRepository {
 
   Future<void> deleteOrder(Order order);
   Future<void> moveToHistory(Order order);
+  Future<List<Order>> getFilteredByNumber(String carNumber, int type);
 }

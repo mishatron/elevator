@@ -56,8 +56,8 @@ class _OrderDetailState extends BaseStatefulScreen<OrderDetail>
                         ],
                       ),
           CustomHero(
+            isScale: true,
             tag: _bloc.order.id,
-              isRotate: true,
               child: getUserAvatar(_bloc.order.driver.photoUrl, 50)),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),

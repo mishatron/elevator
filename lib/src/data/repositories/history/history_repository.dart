@@ -11,5 +11,5 @@ abstract class HistoryRepository extends BaseRepository {
 
   Future<List<Order>> getOutputOrdersFiltered(DateTime filter);
 
-  Future<List<Order>> getFilteredByNumber(String carNumber);
+  Future<List<Order>> getFilteredByNumber(String carNumber, int type);
 }

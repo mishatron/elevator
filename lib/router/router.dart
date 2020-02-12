@@ -1,13 +1,15 @@
+import 'package:elevator/router/route_paths.dart' as routes;
 import 'package:elevator/src/view/create_order/create_order_screen.dart';
 import 'package:elevator/src/view/login/login_screen.dart';
 import 'package:elevator/src/view/main/history/filter/history_filter_screen.dart';
 import 'package:elevator/src/view/main/history/search/search_screen.dart';
+import 'package:elevator/src/view/main/home/search/search_home_screen.dart';
 import 'package:elevator/src/view/main/main_screen.dart';
 import 'package:elevator/src/view/order_detail/order_detail_screen.dart';
 import 'package:elevator/src/view/splash/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:elevator/router/route_paths.dart' as routes;
+
 Route<dynamic> generateRoute(RouteSettings settings) {
   CupertinoPageRoute getPageRoute(Widget screen) {
     return CupertinoPageRoute(builder: (context) => screen, settings: settings);
@@ -28,6 +30,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return getPageRoute(HistoryFilterScreen());
     case routes.searchHistoryRoute:
       return getPageRoute(SearchScreen());
+    case routes.searchOrdersRoute:
+      return getPageRoute(SearchHomeScreen());
 
     default:
       return MaterialPageRoute(

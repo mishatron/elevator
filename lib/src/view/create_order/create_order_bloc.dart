@@ -31,7 +31,7 @@ class CreateOrderBloc extends BaseBloc<BaseBlocState, DoubleBlocState> {
   ValueNotifier<bool> isEmptyField = ValueNotifier(false);
   StreamController streamController;
   Order order = Order();
-  final isNameValidate = RegExp(r"^[а-яА-ЯіІїЇєЄ'-]+$");
+  final isNameValidate = RegExp(r"^[а-яА-ЯіІїЇєЄ' -]+$");
   final isCityValidate = RegExp(r"^[а-яА-ЯіІїЇєЄ. '-]+$");
 
   OrderRepository _orderRepository;

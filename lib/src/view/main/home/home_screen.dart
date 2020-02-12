@@ -62,6 +62,17 @@ class _HomeScreenState extends BaseStatefulScreen<HomeScreen>
   @override
   Widget buildAppbar() {
     return getAppBar(context, 'Головна',
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: colorAccent,
+            ),
+            onPressed: () {
+              injector<NavigationService>().pushNamed(searchOrdersRoute, arguments: _tabController.index);
+            },
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: colorAccent,

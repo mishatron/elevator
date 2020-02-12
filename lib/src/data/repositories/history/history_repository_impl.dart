@@ -61,9 +61,10 @@ class HistoryRepositoryImpl extends HistoryRepository {
   }
 
   @override
-  Future<List<Order>> getFilteredByNumber(String carNumber) {
+  Future<List<Order>> getFilteredByNumber(String carNumber, int type) {
     return Firestore.instance
         .collection('history')
+        .where("order.type", isEqualTo: type)
         .where("order.car.carNumber",
             isGreaterThanOrEqualTo: carNumber.toUpperCase())
         .getDocuments()
