@@ -29,7 +29,7 @@ class ListItem extends StatelessWidget {
     return Padding(
       padding: isMobile()
           ? const EdgeInsets.symmetric(horizontal: 8.0)
-          : const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: RawMaterialButton(
         onPressed: () {
           injector<NavigationService>()

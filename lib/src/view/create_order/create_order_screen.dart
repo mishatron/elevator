@@ -1049,7 +1049,7 @@ class OrderInfoState extends BaseState<OrderInfo> {
                           _toFocusNode.unfocus();
                         },
                         decoration: InputDecoration(
-                          hintText: "Введіть пунки розвантаження",
+                          hintText: "Введіть пункт розвантаження",
                           enabledBorder: const OutlineInputBorder(
                             borderSide:
                                 const BorderSide(color: colorBorder, width: 1),
